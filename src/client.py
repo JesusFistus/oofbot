@@ -6,7 +6,7 @@ __version__ = '0.0 testing'
 
 prefix = config.get('PREFIX')
 dblocation = config.get('DATABASELOCATION')
-
+presence = confi
 
 class DiscordClient(discord.Client):
     def __init__(self, **options):
@@ -19,7 +19,7 @@ class DiscordClient(discord.Client):
         print("--------------------")
 
         # Set presence
-        await self.change_presence(status=discord.Status.online, activity=discord.Game(Config.get('PRESENCE')))
+        await self.change_presence(status=discord.Status.online, activity=discord.Game(presence))
 
         # Do smth on every member in every guild the bot is part of
         for guild in self.guilds:

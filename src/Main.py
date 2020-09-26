@@ -1,4 +1,4 @@
-import DCBot
+import client
 import confighandler as Config
 import discord
 

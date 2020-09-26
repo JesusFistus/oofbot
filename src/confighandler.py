@@ -1,7 +1,7 @@
-configfilelocation = 'C:/Users/Yanni/Documents/GitHub/oofbot/src/data/Bot.cfg'
+configfilelocation = 'data/bot.cfg'
 
 
-def configdict():
+def _configdict():
     contentdict = {}
     with open(configfilelocation, 'r') as file:
         file.seek(0, 0)
@@ -15,7 +15,7 @@ def configdict():
     return contentdict
 
 
-cfgdict = configdict()
+cfgdict = _configdict()
 
 
 def get(key):
@@ -30,4 +30,4 @@ def get(key):
 
 def update():
     global cfgdict
-    cfgdict = configdict()
+    cfgdict = _configdict()

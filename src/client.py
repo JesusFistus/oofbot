@@ -1,27 +1,25 @@
 import discord
-import os
-import confighandler as Config
+import confighandler as config
 
-__version__ = '0.0 test'
-
-# channels
-rules_Ch = 759123487649431575
-
-prefix = Config.get('PREFIX')
-dblocation = Config.get('DATABASELOCATION')
+__version__ = '0.0 testing'
 
 
-class DiscordBot(discord.Client):
+prefix = config.get('PREFIX')
+dblocation = config.get('DATABASELOCATION')
+
+
+class DiscordClient(discord.Client):
     def __init__(self, **options):
         super().__init__(loop=None, **options)
 
     async def on_ready(self):
-        # Presence
-        await self.change_presence(status=discord.Status.online, activity=discord.Game(Config.get('PRESENCE')))
         print("--------------------")
         print('Logged in as')
         print(f"{str(self.user)}, {self.user.id}")
         print("--------------------")
+
+        # Set presence
+        await self.change_presence(status=discord.Status.online, activity=discord.Game(Config.get('PRESENCE')))
 
         # Do smth on every member in every guild the bot is part of
         for guild in self.guilds:

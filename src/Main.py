@@ -1,5 +1,5 @@
 import DCBot
-from lib import confighandler as Config
+import confighandler as Config
 import discord
 
 print("--------------------")

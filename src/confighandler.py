@@ -1,4 +1,4 @@
-configfilelocation = 'C:/Users/Yannic Breiting/Documents/GitHub/oofbot/src/data/bot.cfg'
+configfilelocation = 'data/bot.cfg'
 
 
 def _configdict():

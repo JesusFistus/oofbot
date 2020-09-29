@@ -6,7 +6,7 @@ __version__ = '0.0 testing'
 
 prefix = config.get('PREFIX')
 dblocation = config.get('DATABASELOCATION')
-presence = confi
+presence = config.get('PRESENCE')
 
 class DiscordClient(discord.Client):
     def __init__(self, **options):

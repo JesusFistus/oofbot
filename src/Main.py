@@ -7,8 +7,8 @@ print("Discord.py version")
 print(discord.__version__)
 print("--------------------")
 print("ReichstagBot version")
-print(DCBot.__version__)
+print(client.__version__)
 
 
-bot = DCBot.DiscordBot()
-bot.run(Config.get('TOKEN'))
+client = client.DiscordClient()
+client.run(Config.get('TOKEN'))

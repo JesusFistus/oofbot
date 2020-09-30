@@ -1,17 +1,16 @@
-import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import Sequence
 from sqlalchemy.orm import sessionmaker
-from pathlib import  Path
+from pathlib import Path
 
 
 Session = sessionmaker()
 Column(Integer, Sequence('id'), primary_key=True)
 
 path = 'C:/Users/Yannic Breiting/Documents/GitHub/oofbot/src/data/bot.db'
-engine = create_engine(f'sqlite:///{path}')
+engine = create_engine(f'sqlite:///data/bot.db')
 
 Base = declarative_base()
 Session.configure(bind=engine)
@@ -47,4 +46,6 @@ class Calendar(Base):
         return "(id='%s', name='%s', category='%s', start='%s', end='%s', repitation='%s')\n" % (
                 self.id, self.name, self.category, self.start, self.end, self.repitation)
 
+c = Calendar()
 
+print(c.show_all_entries())

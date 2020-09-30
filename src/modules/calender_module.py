@@ -1,5 +1,5 @@
-import time
 import sqlite3
+import time
 
 
 class Calendar:
@@ -66,6 +66,5 @@ class CalenderEntry:
 
 
 c = Calendar()
-c.load('C:/Users/Yanni/Documents/GitHub/PythonPlayground/calendar.sqlite')
+c.load('C:/Users/Yannic Breiting/Documents/GitHub/oofbot/src/data/bot.db')
 print(c.entries)
-#kot = CalenderEntry('NPE Prüfung', time.mktime(time.localtime()), allocation='Prüfung', all_day=True, description='')

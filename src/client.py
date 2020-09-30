@@ -33,7 +33,6 @@ class DiscordClient(discord.Client):
         pass
 
     async def on_message(self, message):
-        #print(message.channel.id)
         pass
 
     async def on_voice_state_update(self, member, before, after):

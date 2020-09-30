@@ -6,7 +6,7 @@ print("--------------------")
 print("Discord.py version")
 print(discord.__version__)
 print("--------------------")
-print("ReichstagBot version")
+print("EIT-BOT version")
 print(client.__version__)
 
 

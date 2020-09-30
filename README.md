@@ -1,2 +1,2 @@
 # oofbot
-New and improved Discord bot primarily (but not exclusively) for the _Reichstag_ Discord server.
+New and improved Uffbot. primarily (but not exclusively) written for the _Elektrotechnik Studium_ Discord server.

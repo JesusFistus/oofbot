@@ -20,6 +20,7 @@ async def setup_student(message):
     if message.content == '!setup':
         session = Session()
         member = message.author
+        print(member.id)
         if session.query(Student).filter(Student.discord_id == member.id).all():
             student = Student(discord_id=member.id)
             await member.send("Willkommen im Studenten-Setup zur automatischen Rollenzuweisung"
@@ -28,9 +29,20 @@ async def setup_student(message):
                               "gib bitte deinen Vor-&Nachnamen ein."
                               "<Max Bauer>")
             message = await user_input(member.dm_channel, targetuser=member)
-            student.name = message.content.split(' ')
-            print(student)
-
+            name = message.content.split(' ')
+            student.name = name[0]
+            student.surname = name[1]
+            session.add(student)
+            await member.send(f"Hallo {student.name} {student.surname}"
+                              f" gib jetzt bitte noch deine Studiengruppe an"
+                              f" damit wir dich gleich richtig zuordnen können")
+            message = await user_input(member.dm_channel, targetuser=member)
+            study_group = message.content
+            student.discord_id = study_group
+            session.add(student)
+            await member.send(f'Vielen Dank! Du wurdest der Studiengruppe {study_group}'
+                              f' zugewiesen. Damit hast du das Setup erfolgreich abgeschlossen.')
+            session.commit()
     else:
         return
     # ToDo: Dialog zur Abfrage der Daten

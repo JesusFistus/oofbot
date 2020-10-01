@@ -22,8 +22,7 @@ class CalendarEntry(Base):
 class Student(Base):
     __tablename__ = 'Students'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    discord_id = Column(Integer)
+    discord_id = Column(Integer, unique=True)
     name = Column(String)
     surname = Column(String)
     study_group = Column(String)
-

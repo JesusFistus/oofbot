@@ -1,5 +1,5 @@
 import client
-import confighandler as Config
+import config_handler as Config
 import discord
 
 

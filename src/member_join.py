@@ -23,6 +23,7 @@ async def setup_student(message):
         print(member.id)
         if session.query(Student).filter(Student.discord_id == member.id).all():
             student = Student(discord_id=member.id)
+            session.add(student)
             await member.send("Willkommen im Studenten-Setup zur automatischen Rollenzuweisung"
                               " unseres EIT-Servers. "
                               "Damit wir auch innerhalb des Servers wissen wer du bist "
@@ -30,15 +31,13 @@ async def setup_student(message):
                               "<Max Bauer>")
             message = await user_input(member.dm_channel, targetuser=member)
             name = message.content.split(' ')
-            student.name = name[0]
-            student.surname = name[1]
-            session.add(student)
+            student(name=name[0], surname=name[1])
             await member.send(f"Hallo {student.name} {student.surname}"
                               f" gib jetzt bitte noch deine Studiengruppe an"
                               f" damit wir dich gleich richtig zuordnen können")
             message = await user_input(member.dm_channel, targetuser=member)
             study_group = message.content
-            student.discord_id = study_group
+            student(study_group=study_group)
             session.add(student)
             await member.send(f'Vielen Dank! Du wurdest der Studiengruppe {study_group}'
                               f' zugewiesen. Damit hast du das Setup erfolgreich abgeschlossen.')

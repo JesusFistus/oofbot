@@ -3,7 +3,6 @@ from event import user_input
 
 
 async def register_student(member, roles):
-    # check if student is already known
     session = Session()
     if not session.query(Student).filter(Student.discord_id == member.id).all():
         await member.send("Regeln bestätigen:")
@@ -30,7 +29,7 @@ async def student_setup(message):
         student.name = message.content.split(' ')
         print(student)
     else:
-        await member.send("dich gibts ja noch gar ned du keck")
+        await member.send("")
         return
     # ToDo: Dialog zur Abfrage der Daten
 

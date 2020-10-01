@@ -1,6 +1,6 @@
 import discord
 import confighandler as config
-from member_join import register_student, check_students
+from member_join import register_student, check_students, setup_student
 from event import check_events
 
 prefix = config.get('PREFIX')
@@ -35,6 +35,7 @@ class DiscordClient(discord.Client):
         pass
 
     async def on_message(self, message):
+        await setup_student(message)
         await check_events(message)
 
     async def on_voice_state_update(self, member, before, after):

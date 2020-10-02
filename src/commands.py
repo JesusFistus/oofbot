@@ -7,6 +7,7 @@ commands = {
     'setup': student_setup
 }
 
+# TODO: Eingetragene Zuweisungen auslesen lassen und bei bedarf ändern können
 
 PREFIX = config.get('PREFIX')
 

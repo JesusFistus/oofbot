@@ -4,6 +4,11 @@ from commands import check_command
 from student_management import register_student, check_students, check_roles
 from event import check_events
 
+
+intents = discord.Intents()
+intents.members = True
+client = discord.Client(intents=intents)
+
 prefix = config.get('PREFIX')
 dblocation = config.get('DATABASELOCATION')
 presence = config.get('PRESENCE')

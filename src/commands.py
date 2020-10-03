@@ -1,10 +1,12 @@
 import config_handler as config
+from student_calendar import calendar_setup
 from student_management import student_setup
 from general import help
 
 commands = {
     'help': help,
-    'setup': student_setup
+    'setup': student_setup,
+    'calendar': calendar_setup
 }
 
 # TODO: Eingetragene Zuweisungen auslesen lassen und bei bedarf ändern können

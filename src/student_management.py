@@ -6,7 +6,8 @@ import discord
 roles = {}
 study_groups = {}
 
-# TODO: Beliebiege Rollen vergleichen
+
+# TODO: Nach vorhanden Rollen im Server schauen und speichern
 
 async def check_roles(client):
     for guild in client.guilds:
@@ -17,7 +18,7 @@ async def check_roles(client):
 
 # TODO: Einführung ins Setup, Aktivierung auch möglich per DM
 
-async def register_student(client, member):
+async def register_student(member):
     session = Session()
     if not session.query(Student).filter(Student.discord_id == member.id).all():
         await member.send("Regeln bestätigen:")  # TODO: Regeln hinzufügen
@@ -29,31 +30,30 @@ async def register_student(client, member):
         session.commit()
         return
 
+# TODO: Verfügbare Gruppen anzeigen lassen, vllt vorher nach Semester fragen und filtern
 
 async def student_setup(message):
     session = Session()
     member = message.author
     student = session.query(Student).filter(Student.discord_id == member.id).first()
     if student:
+
         await member.send("```Willkommen im Studenten-Setup zur automatischen Rollenzuweisung"
                           " unseres EIT-Servers.\n"
                           "Damit wir auch innerhalb des Servers wissen wer du bist, "
-                          " gib bitte deinen Vor & Nachnamen ein.\n"
-                          "Halte dich bitte an diese Form -> Max Mustermann```")
+                          " gib bitte deinen Vornamen ein```")
+
         message = await user_input(member.dm_channel, targetuser=member)
-        try:
-            name = message.content.split(' ')
-            student.name = name[0]
-            student.surname = name[1]
-        except IndexError:
-            await member.send("```Leider hat da etwas nicht funktioniert. \n"
-                              "Das Setup wird nochmal neu gestartet, bitte \n"
-                              "achte auf die vorgegebene Schreibweise.``` \n")
-            session.close()
-            return await student_setup(message)
-        await member.send(f"```Hallo {student.name} {student.surname},"
-                          f" gib jetzt bitte noch deine Studien- \n"
-                          f"gruppe an, damit wir dich richtig zuordnen können.```")
+        name = message.content
+        student.name = name
+        await member.send("```Und jetzt bitte deinen Nachnamen.```")
+        message = await user_input(member.dm_channel, targetuser=member)
+        surname = message.content
+        student.surname = surname
+        await member.send(f"```Hallo {student.name} {student.surname}, \n"
+                          f"gib jetzt bitte noch deine Studiengruppe an, \n"
+                          f"damit wir dich richtig zuordnen können.```")
+
         message = await user_input(member.dm_channel, targetuser=member)
         study_group = message.content
         student.study_group = study_group
@@ -64,6 +64,7 @@ async def student_setup(message):
                           f'Falls etwas mit deiner Eingabe nicht stimmt, \n'
                           f'führe bitte einfach nochmal das Setup aus und pass \n'
                           f'deine Eingabe an!```')
+
         session.commit()
 
 

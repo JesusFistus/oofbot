@@ -10,15 +10,6 @@ Base = declarative_base()
 Session.configure(bind=engine)
 
 
-class CalendarEntry(Base):
-    __tablename__ = 'CalendarEntries'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
-    category = Column(String)
-    start = Column(Integer)
-    end = Column(Integer)
-
-
 class Student(Base):
     __tablename__ = 'Students'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -26,3 +17,5 @@ class Student(Base):
     name = Column(String)
     surname = Column(String)
     study_group = Column(String)
+
+

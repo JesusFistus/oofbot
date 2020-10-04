@@ -29,6 +29,9 @@ class DiscordClient(discord.Client):
 
         await check_students(self)
 
+
+# TODO: Nochmal anschauen weil nicht rein kot
+
     async def on_member_join(self, member):
         await register_student(self, member)
 

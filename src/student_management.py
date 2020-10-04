@@ -30,6 +30,7 @@ async def register_student(member):
         session.commit()
         return
 
+
 # TODO: Verfügbare Gruppen anzeigen lassen, vllt vorher nach Semester fragen und filtern
 
 async def student_setup(message):
@@ -37,7 +38,6 @@ async def student_setup(message):
     member = message.author
     student = session.query(Student).filter(Student.discord_id == member.id).first()
     if student:
-
         await member.send("```Willkommen im Studenten-Setup zur automatischen Rollenzuweisung"
                           " unseres EIT-Servers.\n"
                           "Damit wir auch innerhalb des Servers wissen wer du bist, "

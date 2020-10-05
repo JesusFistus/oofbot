@@ -16,23 +16,25 @@ async def register_student(member):
 
 
 class Setup(commands.Command):
-    description = 'Startet den Setup-Dialog. Hier kannst du dich registrieren, bzw. deine Angaben ändern.'
-    usage = f'Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
-            f'bzw. deine Angaben aktualisieren'
+    description = 'Startet den Setup-Dialog. Hier kannst du dich registrieren, bzw. deine Angaben ändern.```'
+    usage = f'```Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
+            f'bzw. deine Angaben aktualisieren```'
 
     async def exec(client, message):
         member = get(await client.guild.fetch_members(limit=150).flatten(), id=message.author.id)
 
         print(member)
         if type(member) is not discord.Member:
-            await message.author.send(f'Hoppla!\n'
-                                      f'Wie es scheint, bist du gar kein Mitglied des EIT-Discordservers')
+            await message.author.send(f'```Hoppla!\n'
+                                      f'Wie es scheint, bist du gar kein Mitglied des EIT-Discordservers```')
             return
 
         await member.send("```Willkommen im Studenten-Setup zur automatischen Rollenzuweisung"
                           " unseres EIT-Servers.\n"
-                          "Damit wir auch innerhalb des Servers wissen wer du bist, "
-                          "gib bitte deinen Vornamen ein```")
+                          "Das Setup ist dafür da, dass wir auch innerhalb des Servers wissen wer du bist und \n"
+                          "die wichtigsten Informationen direkt auf deine Studiengruppe angepasst werden. \n"
+                          "Deine Angaben werden intern nicht gespeichert, sondern direkt im EIT-Server geändert. \n"
+                          "Fang bitte mit deinem Namen an!```")
 
         message = await user_input(member.dm_channel, targetuser=member)
         name = message.content
@@ -47,9 +49,9 @@ class Setup(commands.Command):
             outputstring += group + '\n'
 
         await member.send(f"```Hallo {name}, \n"
-                          f"gib jetzt bitte noch deine Studiengruppe an,"
+                          f"gib jetzt bitte noch deine Studiengruppe an, \n"
                           f"damit wir dich richtig zuordnen können.\n"
-                          f"Folgende Studiengruppen stehen zur auswahl:\n"
+                          f"Folgende Studiengruppen stehen zur Auswahl:\n"
                           f"{outputstring}```")
         while True:
             message = await user_input(member.dm_channel, targetuser=member)
@@ -66,11 +68,10 @@ class Setup(commands.Command):
 
         await member.send(f' ```Vielen Dank für die Einschreibung in unseren EIT-Server. \n'
                           f'Du wurdest der Studiengruppe {study_group} zugewiesen. \n'
-                          f'Hiermit hast du das Setup abgeschlossen und du wirst \n'
-                          f'direkt richtig in den Server eingetragen.\n'
+                          f'Hiermit hast du das Setup abgeschlossen und deine Angaben \n'
+                          f'werden in den Server eingetragen.\n'
                           f'Falls etwas mit deiner Eingabe nicht stimmt, \n'
-                          f'führe bitte einfach nochmal das Setup aus und pass \n'
-                          f'deine Eingabe an!```')
+                          f'führe bitte einfach nochmal das Setup aus und pass deine Eingabe an!```')
 
 # TODO: Setup zum Einschreiben in Kurse
 # TODO: Anzeige aktiver Kurse

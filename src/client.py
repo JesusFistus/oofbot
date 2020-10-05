@@ -18,6 +18,10 @@ class DiscordClient(discord.Client):
         # Get calendar entries
         self.events = get_entries()
         loop = asyncio.get_event_loop()
+        # The following should also be run constantly (every xy seconds) to synchronize the calendar
+        # A possibility would be to set the name of each task to the unique event id
+        # and checking whether that task already exists to avoid multiple tasks for the same event
+        # https://stackoverflow.com/questions/41794205/how-to-set-name-for-asyncio-task
         for event in self.events:
             t = event.get("start")
             time = t.get("dateTime")

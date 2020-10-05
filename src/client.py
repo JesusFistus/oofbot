@@ -1,12 +1,10 @@
 import discord
-import config_handler as config
-from commands import check_command
-from student_management import register_student, check_students, check_roles
-from event import check_events
+from discord.utils import get
 
-prefix = config.get('PREFIX')
-dblocation = config.get('DATABASELOCATION')
-presence = config.get('PRESENCE')
+from confighandler import config
+from commands import command_check
+from modules.dialogs import register_student
+from event import check_for_event
 
 
 class DiscordClient(discord.Client):
@@ -14,17 +12,13 @@ class DiscordClient(discord.Client):
         super().__init__(loop=None, **options)
 
     async def on_ready(self):
-        await check_roles(self)
         print("--------------------")
         print('Logged in as')
         print(f"{str(self.user)}, {self.user.id}")
         print("--------------------")
         # Set presence
-        await self.change_presence(status=discord.Status.online, activity=discord.Game(presence))
-
-        await check_students(self)
-
-# TODO: Nochmal anschauen
+        await self.change_presence(status=discord.Status.online, activity=discord.Game(config.presence))
+        self.guild = get(self.guilds, id=config.guild)
 
     async def on_member_join(self, member):
         await register_student(self, member)
@@ -33,8 +27,12 @@ class DiscordClient(discord.Client):
         pass
 
     async def on_message(self, message):
-        await check_events(message)
-        await check_command(message)
+        if message.author == self.user:
+            return
+        if message.content.startswith(config.prefix):
+            await command_check(self, message)
+            return
+        await check_for_event(message)
 
     async def on_voice_state_update(self, member, before, after):
         pass

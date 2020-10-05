@@ -1,7 +1,6 @@
 import client
-import config_handler as Config
 import discord
-
+from confighandler import config
 
 __version__ = '0.0 testing'
 
@@ -15,4 +14,4 @@ print(__version__)
 
 
 client = client.DiscordClient()
-client.run(Config.get('TOKEN'))
+client.run(config.token)

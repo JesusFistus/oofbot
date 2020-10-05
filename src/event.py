@@ -4,11 +4,9 @@ eventlist = []
 
 
 class Event:
-    queue = asyncio.Queue()
-    # Messages from this users into this channel will be redirected to the event
-    inputusers = []
-
     def __init__(self, targetchannel, targetusers=[]):
+        self.inputusers = []
+        self.queue = asyncio.Queue()
         self.channel = targetchannel
         if type(targetusers) is list:
             self.targetusers = targetusers
@@ -46,7 +44,7 @@ async def user_input(targetchannel, targetuser=[]):
     return output
 
 
-async def check_events(message):
+async def check_for_event(message):
     if eventlist:
         for event in eventlist:
             if event.channel == message.channel:

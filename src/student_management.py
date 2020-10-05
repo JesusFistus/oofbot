@@ -1,10 +1,10 @@
-import asyncio
-from database_handler import Student, Session
-from event import user_input
 import discord
 
+from database_handler import Student, Session
+from event import user_input
+
 roles = {}
-study_groups = {}
+study_groups = {"EIB3A", "EIB3B", "EMB3A", "EIB2W"}
 
 
 # TODO: Nach vorhanden Rollen im Server schauen und speichern
@@ -41,22 +41,27 @@ async def student_setup(message):
         await member.send("```Willkommen im Studenten-Setup zur automatischen Rollenzuweisung"
                           " unseres EIT-Servers.\n"
                           "Damit wir auch innerhalb des Servers wissen wer du bist, "
-                          " gib bitte deinen Vornamen ein```")
+                          "gib bitte deinen Vornamen ein```")
 
         message = await user_input(member.dm_channel, targetuser=member)
         name = message.content
-        student.name = name
         await member.send("```Und jetzt bitte deinen Nachnamen.```")
         message = await user_input(member.dm_channel, targetuser=member)
         surname = message.content
-        student.surname = surname
-        await member.send(f"```Hallo {student.name} {student.surname}, \n"
-                          f"gib jetzt bitte noch deine Studiengruppe an, \n"
-                          f"damit wir dich richtig zuordnen können.```")
+        try:
+            await member.edit(nick=f"{name} {surname}")
+        except discord.Forbidden:
+            await member.send("```Bist Admin du Kek!```")
+
+        await member.send(f"```Hallo {name} {surname}, \n"
+                          f"gib jetzt bitte noch deine Studiengruppe an,"
+                          f"damit wir dich richtig zuordnen können. \n"
+                          f"Dies sind die verfügbaren Studiengruppen {study_groups}```")
 
         message = await user_input(member.dm_channel, targetuser=member)
         study_group = message.content
-        student.study_group = study_group
+        await member.add_roles(roles[f'{study_group}'])
+
         await member.send(f' ```Vielen Dank für die Einschreibung in unseren EIT-Server. \n'
                           f'Du wurdest der Studiengruppe {study_group} zugewiesen. \n'
                           f'Hiermit hast du das Setup abgeschlossen und du wirst \n'
@@ -64,8 +69,6 @@ async def student_setup(message):
                           f'Falls etwas mit deiner Eingabe nicht stimmt, \n'
                           f'führe bitte einfach nochmal das Setup aus und pass \n'
                           f'deine Eingabe an!```')
-
-        session.commit()
 
 
 # TODO: Studenten nach einzelnen Parametern checken

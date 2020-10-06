@@ -39,7 +39,7 @@ class DiscordClient(discord.Client):
         self.guild = get(self.guilds, id=config.guild)
 
     async def on_member_join(self, member):
-        await register_student(member)
+        pass
 
     async def on_member_delete(self, member):
         pass

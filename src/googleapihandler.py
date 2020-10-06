@@ -1,11 +1,9 @@
-import datetime
 import os.path
 import pickle
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-import dateutil.parser
-import asyncio, datetime
+import datetime
 
 
 # If modifying these scopes, delete the file token.pickle.

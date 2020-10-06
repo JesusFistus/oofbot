@@ -1,18 +1,8 @@
 import discord
 from discord.utils import get
-
 import commands
 from confighandler import config, roles
 from event import user_input
-
-
-# TODO: Einführung ins Setup, Aktivierung auch möglich per DM
-
-async def register_student(member):
-        await member.send("Regeln bestätigen:")  # TODO: Regeln hinzufügen
-        await user_input(member.dm_channel, targetuser=member)
-        await member.send("willst du gleich setup machen alla? dann mach !setup")
-        await member.add_roles(roles['student'])
 
 
 class Setup(commands.Command):
@@ -22,8 +12,6 @@ class Setup(commands.Command):
 
     async def exec(client, message):
         member = get(await client.guild.fetch_members(limit=150).flatten(), id=message.author.id)
-
-        print(member)
         if type(member) is not discord.Member:
             await message.author.send(f'```Hoppla!\n'
                                       f'Wie es scheint, bist du gar kein Mitglied des EIT-Discordservers```')
@@ -41,7 +29,7 @@ class Setup(commands.Command):
         try:
             await member.edit(nick=name)
         except discord.Forbidden:
-            await member.send("```Bist Admin du Kek!```")
+            pass
 
         groups = roles.study_groups.keys()
         outputstring = ''

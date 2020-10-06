@@ -23,7 +23,7 @@ def get_entries():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                'data/google/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open('data/google/token.pickle', 'wb') as token:
@@ -32,12 +32,12 @@ def get_entries():
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     events_result = service.events().list(calendarId='725rsi3qcv97e8egkg7ck9kg5o@group.calendar.google.com',
-                                          maxResults=10,
+                                          maxResults=1,
                                           timeMin=now,
                                           singleEvents=True,
                                           orderBy='startTime').execute()
     events = events_result.get('items', [])
-
+    print(events)
     return events
 
 get_entries()

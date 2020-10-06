@@ -39,5 +39,3 @@ def get_entries():
     events = events_result.get('items', [])
     print(events)
     return events
-
-get_entries()

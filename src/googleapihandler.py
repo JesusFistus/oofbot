@@ -5,7 +5,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import datetime
 
-
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
@@ -29,11 +28,22 @@ def get_entries():
     service = build('calendar', 'v3', credentials=creds)
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    events_result = service.events().list(calendarId='725rsi3qcv97e8egkg7ck9kg5o@group.calendar.google.com',
-                                          maxResults=1,
-                                          timeMin=now,
-                                          singleEvents=True,
-                                          orderBy='startTime').execute()
-    events = events_result.get('items', [])
-    print(events)
-    return events
+    calendars_result = service.calendarList().list().execute()
+    events_list = []
+    for calendar_info in calendars_result['items']:
+        events = service.events().list(calendarId=calendar_info['id'], timeMin=now, maxResults=10,
+                                       singleEvents=True,
+                                       orderBy='startTime').execute()
+        events_list.append(events)
+    return events_list
+
+
+# events_result = service.events().list(calendarId='725rsi3qcv97e8egkg7ck9kg5o@group.calendar.google.com',
+#                                        maxResults=maxResults,
+#                                        timeMin=now,
+#                                        singleEvents=True,
+#                                        orderBy='startTime').execute()
+#  events = events_result.get('items', [])
+#  return events
+
+

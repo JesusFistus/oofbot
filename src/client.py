@@ -7,7 +7,7 @@ from commands import command_check
 from confighandler import config
 # from modules.dialogs import register_student
 from event import check_for_event
-from modules.calendar import calender_remember
+from modules.calendar_module import calendar_remember
 
 
 class DiscordClient(discord.Client):
@@ -24,7 +24,10 @@ class DiscordClient(discord.Client):
         # Set presence
         await self.change_presence(status=discord.Status.online, activity=discord.Game(config.presence))
         self.guild = get(self.guilds, id=config.guild)
-        await calender_remember()
+
+        for i in range(10):
+            await calendar_remember()
+        await calendar_remember()
 
     async def on_member_join(self, member):
         pass

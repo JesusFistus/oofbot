@@ -24,7 +24,7 @@ class DiscordClient(discord.Client):
 
         while True:
             self.calendar.refresh()
-            await asyncio.sleep(30)
+            await asyncio.sleep(10)
 
     async def on_member_join(self, member):
         pass

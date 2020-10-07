@@ -1,3 +1,4 @@
+import asyncio
 from typing import Optional, Any
 
 import discord
@@ -7,12 +8,10 @@ from commands import command_check
 from confighandler import config
 # from modules.dialogs import register_student
 from event import check_for_event
-from modules.calendar_module import calendar_remember
+from modules.calendar import calendar_refresh
 
 
 class DiscordClient(discord.Client):
-    guild: Optional[Any]
-
     def __init__(self, **options):
         super().__init__(loop=None, **options)
 
@@ -25,9 +24,10 @@ class DiscordClient(discord.Client):
         await self.change_presence(status=discord.Status.online, activity=discord.Game(config.presence))
         self.guild = get(self.guilds, id=config.guild)
 
-        for i in range(10):
-            await calendar_remember()
-        await calendar_remember()
+        while True:
+            print('calendar_refresh')
+            await calendar_refresh(self)
+            await asyncio.sleep(600)
 
     async def on_member_join(self, member):
         pass

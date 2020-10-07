@@ -7,3 +7,4 @@ asyncio~=3.4.3
 python-dateutil~=2.8.1
 pytz~=2020.1
 google~=3.0.0
+beautifulsoup4

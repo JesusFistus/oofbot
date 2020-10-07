@@ -29,7 +29,7 @@ class ReminderCalendar:
                 self._set_reminder(event)
 
     def _set_reminder(self, event):
-        time = parse_time(event, 'start')
+        time = self.parse_time(event, 'start')
         time -= datetime.timedelta(minutes=30)
         if time <= datetime.datetime.now(tz=self.tz):
             return
@@ -56,8 +56,8 @@ class ReminderCalendar:
         message_content = f'{event["organizer"]["displayName"]}: {event["summary"]} in 30 Minuten!' # TODO: flexible time
         desc_soup = BeautifulSoup(event['description'])
         desc_plain_text = desc_soup.get_text()
-        start_time = parse_time(event, 'start')
-        end_time = parse_time(event, 'end')
+        start_time = self.parse_time(event, 'start')
+        end_time = self.parse_time(event, 'end')
         duration = end_time - start_time
         location = event['location']
 

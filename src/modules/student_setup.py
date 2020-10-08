@@ -17,8 +17,8 @@ class Setup(commands.Command):
                                       f'Wie es scheint, bist du gar kein Mitglied des EIT-Discordservers```')
             return
 
-        setup_embed = discord.Embed(description=dialogs['setup_dialog']['setup_begin'], colour=discord.Colour(0x2fb923),
-                                    title='Studenten-Setup')
+        setup_embed = discord.Embed(description=dialogs['setup_dialog']['begin'], colour=discord.Colour(0x2fb923),
+                                    title=dialogs['setup_dialog']['title'])
 
         await member.send(embed=setup_embed)
 
@@ -29,16 +29,22 @@ class Setup(commands.Command):
         except discord.Forbidden:
             pass
 
-        groups = roles.study_groups.keys()
-        outputstring = ''
-        for group in groups:
-            outputstring += group + '\n'
+        study_groups = roles.study_groups.keys()
 
-        await member.send(f"```Hallo {name}, \n"
-                          f"gib jetzt bitte noch deine Studiengruppe an, \n"
-                          f"damit wir dich richtig zuordnen können.\n"
-                          f"Folgende Studiengruppen stehen zur Auswahl:\n"
-                          f"{outputstring}```")
+        outputstring = ''
+        for semester_key in study_groups:
+            groups = dict.fromkeys(semester_key)
+            print(groups)
+            for group in groups:
+                print(group)
+                outputstring += group + '\n'
+
+        setup_embed = discord.Embed(description=dialogs['setup_dialog']['group'].format(name, outputstring), colour=discord.Colour(0x2fb923),
+                                    title=dialogs['setup_dialog']['title'])
+        setup_embed.add_field(name="2. Semester", value='kot', inline=True)
+
+        await member.send(embed=setup_embed)
+
         while True:
             message = await user_input(member.dm_channel, targetuser=member)
             study_group = message.content.upper()
@@ -47,17 +53,15 @@ class Setup(commands.Command):
                 await member.add_roles(role)
                 break
             else:
-                await member.send(f"```Hoppla!\n"
-                                  f"Wie es scheint ist {message.content} keine gültige Studiengruppe.\n"
-                                  f"Gehe sicher, dass du eine der aufgelisteten Studiengruppen eingetippt hast.\n"
-                                  f"Ist deine Studiengruppe nicht dabei? Dann kontaktiere bitte ```")
 
-        await member.send(f' ```Vielen Dank für die Einschreibung in unseren EIT-Server. \n'
-                          f'Du wurdest der Studiengruppe {study_group} zugewiesen. \n'
-                          f'Hiermit hast du das Setup abgeschlossen und deine Angaben \n'
-                          f'werden in den Server eingetragen.\n'
-                          f'Falls etwas mit deiner Eingabe nicht stimmt, \n'
-                          f'führe bitte einfach nochmal das Setup aus und pass deine Eingabe an!```')
+                setup_embed = discord.Embed(description=dialogs['setup_dialog']['end'], colour=discord.Colour(0x2fb923),
+                                            title=dialogs['setup_dialog']['title'])
+                await member.send(embed=setup_embed)
+
+        setup_embed = discord.Embed(description=dialogs['setup_dialog']['error'], colour=discord.Colour(0x2fb923),
+                                    title=dialogs['setup_dialog']['title'])
+
+        await member.send(embed=setup_embed)
 
 # TODO: Setup zum Einschreiben in Kurse
 # TODO: Anzeige aktiver Kurse

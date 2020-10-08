@@ -44,11 +44,7 @@ class ReminderCalendar:
         new_reminder = asyncio.create_task(self._remind(time, event), name=event_id)
         self.reminders.append(new_reminder)
 
-    async def _remind(self, time, event):
-        try:
-            await _wait_until(time)
-        except asyncio.CancelledError:
-            raise
+    def create_embed(self, event):
         message_content = f'{event["organizer"]["displayName"]}: {event["summary"]} in 30 Minuten!'  # TODO: flexible time
         desc_plain_text = html2text.html2text(event['description'])
         start_time = self.parse_time(event, 'start')
@@ -60,14 +56,12 @@ class ReminderCalendar:
                                       title=message_content)
 
         message_embed.add_field(name="Ort / URL", value=location, inline=False)
-
         message_embed.add_field(name="Datum", value=start_time.strftime("%a, %d.%m.%Y"), inline=False)
         message_embed.add_field(name="Startzeit", value=start_time.strftime("%H:%M"), inline=True)
         message_embed.add_field(name="Dauer", value=str(duration), inline=True)
         message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
 
-        await self.client.guild.text_channels[0].send(embed=message_embed)
-        print("fuck this")
+        return message_embed
 
     def parse_time(self, event, event_time_key):
         if 'dateTime' in event[event_time_key]:
@@ -82,3 +76,11 @@ class ReminderCalendar:
             print("No date or dateTime key in event dict recieved from Google Calendar API. \n Ignoring event.")
             return
         return time
+
+    async def _remind(self, time, event):
+        try:
+            await _wait_until(time)
+        except asyncio.CancelledError:
+            raise
+        message_embed = self.create_embed(event)
+        await self.client.guild.text_channels[0].send(embed=message_embed)

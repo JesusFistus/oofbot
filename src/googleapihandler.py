@@ -31,7 +31,7 @@ def get_entries():
     calendars_result = service.calendarList().list().execute()
     events_list = []
     for calendar_info in calendars_result['items']:
-        events = service.events().list(calendarId=calendar_info['id'], timeMin=now, maxResults=10,
+        events = service.events().list(calendarId=calendar_info['id'], timeMin=now, maxResults=5,
                                        singleEvents=True,
                                        orderBy='startTime').execute()
         events_list.append(events)

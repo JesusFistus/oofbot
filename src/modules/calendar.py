@@ -50,27 +50,8 @@ class ReminderCalendar:
             await _wait_until(time)
         except asyncio.CancelledError:
             raise
-        study_group = event["calendar"]
-        name = event["summary"]
-        print(study_group)
-        print(name)
-        message_content = f'{study_group}: {name} in 30 Minuten!'  # TODO: flexible time
-        await self.client.guild.text_channels[0].send(message_content)
-        desc_plain_text = html2text.html2text(event['description'])
-        start_time = self.parse_time(event, 'start')
-        end_time = self.parse_time(event, 'end')
-        duration = end_time - start_time
-        location = event['location']
-        await self.client.guild.text_channels[0].send("hitler again again")
-        message_embed = discord.Embed(description=desc_plain_text, colour=discord.Colour(0x2fb923),
-                                      title=message_content)
-        message_embed.add_field(name="Ort / URL", value=location, inline=False)
 
-        message_embed.add_field(name="Datum", value=start_time.strftime("%a, %d.%m.%Y"), inline=False)
-        message_embed.add_field(name="Startzeit", value=start_time.strftime("%H:%M"), inline=True)
-        message_embed.add_field(name="Dauer", value=str(duration), inline=True)
-        message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
-        await self.client.guild.text_channels[0].send(embed=message_embed)
+        await self.client.guild.text_channels[0].send("HITLER")
 
     def parse_time(self, event, event_time_key):
         if 'dateTime' in event[event_time_key]:

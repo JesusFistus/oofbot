@@ -26,7 +26,6 @@ class ReminderCalendar:
         for calendar in calendar_list:
             for event in calendar['items']:
                 event['calendar'] = calendar['summary']
-                print(event)
                 self._set_reminder(event)
 
     def _set_reminder(self, event):
@@ -45,13 +44,36 @@ class ReminderCalendar:
         new_reminder = asyncio.create_task(self._remind(time, event), name=event_id)
         self.reminders.append(new_reminder)
 
+    def create_embed(self, event):
+        try:
+            message_content = f'{event["organizer"]["displayName"]}: {event["summary"]} in 30 Minuten!'  # TODO: flexible time
+            desc_plain_text = html2text.html2text(event['description'])
+            start_time = self.parse_time(event, 'start')
+            end_time = self.parse_time(event, 'end')
+            duration = end_time - start_time
+            location = event['location']
+        except KeyError:
+            print("could not create embed from event dictionary")
+            return
+
+        message_embed = discord.Embed(description=desc_plain_text, colour=discord.Colour(0x2fb923),
+                                      title=message_content)
+        message_embed.add_field(name="Ort / URL", value=location, inline=False)
+        message_embed.add_field(name="Datum", value=start_time.strftime("%a, %d.%m.%Y"), inline=False)
+        message_embed.add_field(name="Startzeit", value=start_time.strftime("%H:%M"), inline=True)
+        message_embed.add_field(name="Dauer", value=str(duration), inline=True)
+        message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
+
+        return message_embed
+
     async def _remind(self, time, event):
         try:
             await _wait_until(time)
         except asyncio.CancelledError:
             raise
-
-        await self.client.guild.text_channels[0].send("HITLER")
+        await self.client.guild.text_channels[0].send("aisjodf")
+        embed = self.create_embed(event)
+        await self.client.guild.text_channels[0].send(embed=embed)
 
     def parse_time(self, event, event_time_key):
         if 'dateTime' in event[event_time_key]:

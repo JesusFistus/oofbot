@@ -1,7 +1,7 @@
 import discord
 from discord.utils import get
 import commands
-from confighandler import config, roles
+from confighandler import config, roles, dialogs
 from event import user_input
 
 
@@ -17,12 +17,10 @@ class Setup(commands.Command):
                                       f'Wie es scheint, bist du gar kein Mitglied des EIT-Discordservers```')
             return
 
-        await member.send("```Willkommen im Studenten-Setup zur automatischen Rollenzuweisung"
-                          " unseres EIT-Servers.\n"
-                          "Das Setup ist dafür da, dass wir auch innerhalb des Servers wissen wer du bist und \n"
-                          "die wichtigsten Informationen direkt auf deine Studiengruppe angepasst werden. \n"
-                          "Deine Angaben werden intern nicht gespeichert, sondern direkt im EIT-Server geändert. \n"
-                          "Fang bitte mit deinem Namen an!```")
+        setup_embed = discord.Embed(description=dialogs['setup_dialog']['setup_begin'], colour=discord.Colour(0x2fb923),
+                                    title='Studenten-Setup')
+
+        await member.send(embed=setup_embed)
 
         message = await user_input(member.dm_channel, targetuser=member)
         name = message.content

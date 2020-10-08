@@ -11,7 +11,6 @@ class DiscordClient(discord.Client):
     def __init__(self, **options):
         super().__init__(loop=None, **options)
 
-
     async def on_ready(self):
         print("--------------------")
         print('Logged in as')
@@ -22,9 +21,9 @@ class DiscordClient(discord.Client):
         self.guild = get(self.guilds, id=config.guild)
         self.calendar = ReminderCalendar(self)
 
-        while True:
-            self.calendar.refresh()
-            await asyncio.sleep(10)
+        #while True:
+         #   self.calendar.refresh()
+          #  await asyncio.sleep(10)
 
     async def on_member_join(self, member):
         pass

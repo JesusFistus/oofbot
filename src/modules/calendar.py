@@ -5,7 +5,6 @@ import discord
 import html2text as html2text
 from pytz import timezone
 from googleapihandler import get_entries
-from bs4 import BeautifulSoup
 
 
 async def _wait_until(dt):

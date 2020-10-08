@@ -33,10 +33,10 @@ async def command_check(client, message):
     await commands[command].exec(client, message)
 
 
-from modules import general, calendar, dialogs
+from modules import general, calendar, student_setup
 
 commands = {
     'help': general.Help,
     '': general.Help,
-    'setup': dialogs.Setup
+    'setup': student_setup.Setup
 }

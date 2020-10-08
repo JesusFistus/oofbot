@@ -20,6 +20,13 @@ class RolesConfig(yaml.YAMLObject):
         self.guild = guild
 
 
+class Dialogs(yaml.YAMLObject):
+    yaml_tag = u'Dialogs'
+
+    def __init__(self, setup_dialogs):
+        self.setup_dialogs = setup_dialogs
+
+
 with open('data/config.yml', 'r') as file:
     config = yaml.load(file, Loader=yaml.Loader)
     print('BotConfig loaded successfully')
@@ -29,3 +36,8 @@ with open('data/roles.yml', 'r') as file:
     roles = yaml.load(file, Loader=yaml.Loader)
     print('GuildConfig loaded successfully')
     print(roles.__dict__)
+
+with open('data/dialogs.yml', 'r') as file:
+    dialogs = yaml.load(file, Loader=yaml.Loader)
+    print('Dialogs loaded successfully')
+    print(dialogs)

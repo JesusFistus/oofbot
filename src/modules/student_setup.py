@@ -1,27 +1,35 @@
 import discord
+import yaml
 from discord.utils import get
 import commands
-from confighandler import config, roles, dialogs
+from confighandler import config, get_study_groups
 from event import user_input
 
+#TODO: Formatieren
 
 class Setup(commands.Command):
     description = 'Startet den Setup-Dialog. Hier kannst du dich registrieren, bzw. deine Angaben ändern.```'
     usage = f'```Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
             f'bzw. deine Angaben aktualisieren```'
 
+    @staticmethod
     async def exec(client, message):
-        member = get(await client.guild.fetch_members(limit=150).flatten(), id=message.author.id)
-        if type(member) is not discord.Member:
-            await message.author.send(f'```Hoppla!\n'
-                                      f'Wie es scheint, bist du gar kein Mitglied des EIT-Discordservers```')
+        member = get(client.guild.discord_obj.members, id=message.author.id)
+
+        if type(member) != discord.member.Member:
+            print('User is not part of the guild, ignoring')
             return
+        # load dialogs
+        with open('data/dialogs.yml', 'r', encoding='utf8') as file:
+            dialogs = yaml.load(file, Loader=yaml.Loader)
 
-        setup_embed = discord.Embed(description=dialogs['setup_dialog']['begin'], colour=discord.Colour(0x2fb923),
-                                    title=dialogs['setup_dialog']['title'])
+        # send beginning message
+        embed = discord.Embed(description=dialogs['setup_dialog']['begin'],
+                              colour=discord.Colour(0x2fb923),
+                              title=dialogs['setup_dialog']['title'])
+        await member.send(embed=embed)
 
-        await member.send(embed=setup_embed)
-
+        # await name-input
         message = await user_input(member.dm_channel, targetuser=member)
         name = message.content
         try:
@@ -29,39 +37,44 @@ class Setup(commands.Command):
         except discord.Forbidden:
             pass
 
-        study_groups = roles.study_groups.keys()
+        # send group_selection message
+        embed = discord.Embed(description=dialogs['setup_dialog']['group_selection'].format(name=name),
+                              colour=discord.Colour(0x2fb923),
+                              title=dialogs['setup_dialog']['title'])
 
-        outputstring = ''
-        for semester_key in study_groups:
-            groups = dict.fromkeys(semester_key)
-            print(groups)
-            for group in groups:
-                print(group)
-                outputstring += group + '\n'
+        for semester in client.guild.semester:
+            group_string = ''
+            for group in semester.groups:
+                group_string += group.name + '\n'
 
-        setup_embed = discord.Embed(description=dialogs['setup_dialog']['group'].format(name, outputstring), colour=discord.Colour(0x2fb923),
-                                    title=dialogs['setup_dialog']['title'])
-        setup_embed.add_field(name="2. Semester", value='kot', inline=True)
+            embed.add_field(name=semester.name, value=group_string, inline=False)
+        await member.send(embed=embed)
 
-        await member.send(embed=setup_embed)
-
-        while True:
+        flag = 1
+        while flag:
             message = await user_input(member.dm_channel, targetuser=member)
-            study_group = message.content.upper()
-            if study_group in groups:
-                role = get(client.guild.roles, id=roles.study_groups[study_group])
-                await member.add_roles(role)
-                break
-            else:
+            for study_group in get_study_groups(client.guild):
+                if message.content.upper() == study_group.name:
+                    await member.add_roles(study_group)
+                    embed = discord.Embed(description=dialogs['setup_dialog']['end'].format(study_group=study_group),
+                                          colour=discord.Colour(0x2fb923),
+                                          title=dialogs['setup_dialog']['title'])
 
-                setup_embed = discord.Embed(description=dialogs['setup_dialog']['end'], colour=discord.Colour(0x2fb923),
-                                            title=dialogs['setup_dialog']['title'])
-                await member.send(embed=setup_embed)
+                    await member.send(embed=embed)
+                    return
+                else:
+                    embed = discord.Embed(description=dialogs['setup_dialog']['error'].format(message=message.content),
+                                          colour=discord.Colour(0x2fb923),
+                                          title=dialogs['setup_dialog']['title'])
+            await member.send(embed=embed)
 
-        setup_embed = discord.Embed(description=dialogs['setup_dialog']['error'], colour=discord.Colour(0x2fb923),
-                                    title=dialogs['setup_dialog']['title'])
 
-        await member.send(embed=setup_embed)
+def make_embed(dialogs, keyword, argument=None):
+     embed = discord.Embed(description=dialogs['setup_dialog'][keyword].format(),
+                                colour=discord.Colour(0x2fb923),
+                                title=dialogs['setup_dialog']['title'])
+     return embed
+
 
 # TODO: Setup zum Einschreiben in Kurse
 # TODO: Anzeige aktiver Kurse

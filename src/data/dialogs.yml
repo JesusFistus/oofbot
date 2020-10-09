@@ -8,7 +8,7 @@ setup_dialog:
           Deine Angaben werden intern nicht gespeichert, sondern direkt im EIT-Server geändert.
           Fang bitte mit deinem Namen an!"
 
-  group: "Hallo {},
+  group_selection: "Hallo {name},
           gib jetzt bitte noch deine Studiengruppe an,
           damit wir dich richtig zuordnen können.
           Folgende Studiengruppen stehen zur Auswahl:"
@@ -21,8 +21,13 @@ setup_dialog:
         führe bitte einfach nochmal das Setup aus und pass deine Eingabe an!"
 
   error:  "Hoppla!
-          Wie es scheint ist {message.content} keine gültige Studiengruppe.
+          Wie es scheint ist {message} keine gültige Studiengruppe.
           Gehe sicher, dass du eine der aufgelisteten Studiengruppen eingetippt hast.
           Ist deine Studiengruppe nicht dabei? Dann kontaktiere uns bitte!"
 
 register_dialog:
+
+# TODO Register_Student
+# TODO Rules
+# TODO Formatieren
+# TODO Multilingual

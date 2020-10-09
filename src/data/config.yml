@@ -1,5 +1,5 @@
 !<BotConfig>
-token: NzIxNDg4NDk1OTQ3OTM5OTIw.XuVQhg.B2m4oxS_qN5Q1kLatiyz6TVyQ70
-prefix: '!'
+# Bot specific
+token: NzIxNDg4NDk1OTQ3OTM5OTIw.XuVQhg.KRobe_aQvtS70raX_y73b6XNKIs
+prefix: '#'
 presence: with fire
-guild: 759123487649431572

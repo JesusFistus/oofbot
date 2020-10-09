@@ -1,8 +1,7 @@
 import asyncio
 import discord
-from discord.utils import get
 from commands import command_check
-from confighandler import config
+from confighandler import config, load_guild_config
 from event import check_for_event
 from modules.calendar import ReminderCalendar
 
@@ -16,11 +15,17 @@ class DiscordClient(discord.Client):
         print('Logged in as')
         print(f"{str(self.user)}, {self.user.id}")
         print("--------------------")
+
         # Set presence
         await self.change_presence(status=discord.Status.online, activity=discord.Game(config.presence))
-        self.guild = get(self.guilds, id=config.guild)
+
+        # load guild_config
+        load_guild_config(self)
+
+        # create Calendar object
         self.calendar = ReminderCalendar(self)
 
+        # calendar refresher
         while True:
             self.calendar.refresh()
             await asyncio.sleep(10)

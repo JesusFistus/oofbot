@@ -1,5 +1,8 @@
 from confighandler import config
 
+#TODO Embed
+#TODO Mehr commands
+#TODO
 
 # Command Baseclass. Commands must subclass this
 class Command:
@@ -9,6 +12,7 @@ class Command:
     permission = 0      # role needed to use the command. 0: everyone, 1: "registered" members, 2: administrators
 
     # When the command is used right, this method will be executed.
+    @staticmethod
     async def exec(client, message):
         pass
 
@@ -33,7 +37,7 @@ async def command_check(client, message):
     await commands[command].exec(client, message)
 
 
-from modules import general, calendar, student_setup
+from modules import general, student_setup
 
 commands = {
     'help': general.Help,

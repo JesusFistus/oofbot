@@ -52,9 +52,8 @@ class ReminderCalendar:
             end_time = self.parse_time(event, 'end')
             duration = end_time - start_time
             location = event['location']
-        except KeyError:
-            print("could not create embed from event dictionary")
-            return
+        except KeyError as e:
+            raise
 
         message_embed = discord.Embed(description=desc_plain_text, colour=discord.Colour(0x2fb923),
                                       title=message_content)
@@ -71,9 +70,12 @@ class ReminderCalendar:
             await _wait_until(time)
         except asyncio.CancelledError:
             raise
-        await self.client.guild.text_channels[0].send("aisjodf")
-        embed = self.create_embed(event)
-        await self.client.guild.text_channels[0].send(embed=embed)
+        try:
+            embed = self.create_embed(event)
+            await self.client.guild.text_channels[0].send(embed=embed)
+        except KeyError as e:
+            print("could not create embed from event dictionary:\n")
+            print(e)
 
     def parse_time(self, event, event_time_key):
         if 'dateTime' in event[event_time_key]:

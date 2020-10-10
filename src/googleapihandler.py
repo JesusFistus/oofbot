@@ -9,7 +9,7 @@ import datetime
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 
-def get_entries():
+def get_entries(max_entries_per_calendar=5):
     creds = None
     if os.path.exists('data/google/token.pickle'):
         with open('data/google/token.pickle', 'rb') as token:
@@ -29,21 +29,13 @@ def get_entries():
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     calendars_result = service.calendarList().list().execute()
-    events_list = []
+    entries = []
     for calendar_info in calendars_result['items']:
-        events = service.events().list(calendarId=calendar_info['id'], timeMin=now, maxResults=5,
-                                       singleEvents=True,
-                                       orderBy='startTime').execute()
-        events_list.append(events)
-    return events_list
+        calendar = service.events().list(calendarId=calendar_info['id'], timeMin=now,
+                                         maxResults=max_entries_per_calendar,
+                                         singleEvents=True,
+                                         orderBy='startTime').execute()
+        for entry in calendar['items']:
+            entries.append(entry)
 
-
-# events_result = service.events().list(calendarId='725rsi3qcv97e8egkg7ck9kg5o@group.calendar.google.com',
-#                                        maxResults=maxResults,
-#                                        timeMin=now,
-#                                        singleEvents=True,
-#                                        orderBy='startTime').execute()
-#  events = events_result.get('items', [])
-#  return events
-
-
+    return entries

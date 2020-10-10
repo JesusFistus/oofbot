@@ -4,6 +4,7 @@ from confighandler import config
 #TODO Mehr commands
 #TODO
 
+
 # Command Baseclass. Commands must subclass this
 class Command:
     description = ''    # short description, shown in !help

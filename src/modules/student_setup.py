@@ -5,6 +5,7 @@ import commands
 from confighandler import config, get_study_groups
 from event import user_input
 
+
 #TODO: Formatieren
 
 class Setup(commands.Command):
@@ -68,12 +69,6 @@ class Setup(commands.Command):
                                           title=dialogs['setup_dialog']['title'])
             await member.send(embed=embed)
 
-
-def make_embed(dialogs, keyword, argument=None):
-     embed = discord.Embed(description=dialogs['setup_dialog'][keyword].format(),
-                                colour=discord.Colour(0x2fb923),
-                                title=dialogs['setup_dialog']['title'])
-     return embed
 
 
 # TODO: Setup zum Einschreiben in Kurse

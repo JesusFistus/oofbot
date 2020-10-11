@@ -8,7 +8,6 @@ from pytz import timezone
 from confighandler import get_study_groups
 from googleapihandler import get_entries
 
-
 TIMEZONE = timezone('Europe/Berlin')
 
 
@@ -46,6 +45,9 @@ def create_reminder_embed(entry):
         duration = end_time - start_time
         message_embed.add_field(name="Dauer", value=(str(duration)[:-3]), inline=True)
         message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
+        message_embed.add_field(name="__Quicklinks:__", value=' [HM-Startseite](https://www.hm.edu/) '
+                                                              ' [Moodle](https://moodle.hm.edu/my/) '
+                                                              ' [Primus](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm) ')
 
     return message_embed
 

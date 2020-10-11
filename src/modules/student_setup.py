@@ -21,6 +21,7 @@ class Setup(commands.Command):
         if type(member) != discord.member.Member:
             print('User is not part of the guild, ignoring')
             return
+
         # load dialogs
         with open('data/dialogs.yml', 'r', encoding='utf8') as file:
             dialogs = yaml.load(file, Loader=yaml.Loader)
@@ -51,8 +52,10 @@ class Setup(commands.Command):
                 group_string += group.name + '\n'
 
             embed.add_field(name=semester.name, value=group_string, inline=True)
+
         await member.send(embed=embed)
 
+        # loop until group_selection ended
         flag = True
         while flag:
             message = await user_input(member.dm_channel, targetuser=member)

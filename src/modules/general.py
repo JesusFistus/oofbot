@@ -22,8 +22,12 @@ class Help(commands.Command):
                 if value is not Help:
                     keystring = f'{key}:'
                     description = f'{value.description}'
-                    embed.add_field(name=keystring, value=description)
+                    embed.add_field(name=keystring, value=description, inline=False)
 
+            embed.add_field(name="__Quicklinks:__", value=' [HM-Startseite](https://www.hm.edu/) '
+                                                          ' [Moodle](https://moodle.hm.edu/my/) '
+                                                          ' [Primus](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm) ')
+            await message.author.send('kot')
             await message.author.send(embed=embed)
 
         elif len(arguments) == 2:
@@ -32,7 +36,9 @@ class Help(commands.Command):
                 embed = discord.Embed(title=arguments[1],
                                       colour=discord.Colour(0xff0000),
                                       description=command_usage)
-
+                embed.add_field(name="__Quicklinks:__", value='[HM-Startseite](https://www.hm.edu/)'
+                                                              '[Moodle](https://moodle.hm.edu/my/)'
+                                                              '[Primus](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm)')
                 await message.author.send(embed=embed)
 
             except KeyError:

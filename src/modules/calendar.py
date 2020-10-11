@@ -35,17 +35,17 @@ def create_reminder_embed(entry):
     # Optional field
     if 'location' in entry:
         location = entry['location']
-        #message_embed.add_field(name="Ort / URL", value=location, inline=False)
+        message_embed.add_field(name="Ort / URL", value=location, inline=False)
 
-    #message_embed.add_field(name="Datum", value=start_time.strftime("%a, %d.%m.%Y"), inline=False)
-    #message_embed.add_field(name="Startzeit", value=start_time.strftime("%H:%M"), inline=True)
+    message_embed.add_field(name="Datum", value=start_time.strftime("%a, %d.%m.%Y"), inline=False)
+    message_embed.add_field(name="Startzeit", value=start_time.strftime("%H:%M"), inline=True)
 
     # Optional field
     if 'end' in entry:
         end_time = parse_time(entry, 'end')
         duration = end_time - start_time
-        #message_embed.add_field(name="Dauer", value=str(duration), inline=True)
-        #message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
+        message_embed.add_field(name="Dauer", value=(str(duration)[:-3]), inline=True)
+        message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
 
     return message_embed
 
@@ -96,8 +96,6 @@ async def remind(client, entry):
     for semester in client.guild.semester:
         for study_group in semester.study_groups:
             if study_group.name == entry["organizer"]["displayName"]:
-                embed = discord.Embed(description="d", colour=discord.Colour(0x2fb923),
-                                              title="mäh")
                 await semester.announcment_channel.send(embed=embed)
                 return
     print("could not find a corresponding announcment channel to post the reminder.\n Ignoring reminder")

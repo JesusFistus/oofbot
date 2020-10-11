@@ -1,16 +1,18 @@
 from confighandler import config
+import discord
 
-#TODO Embed
-#TODO Mehr commands
-#TODO
+
+# TODO Embed
+# TODO Mehr commands
+# TODO
 
 
 # Command Baseclass. Commands must subclass this
 class Command:
-    description = ''    # short description, shown in !help
-    usage = ''          # usage/long description, shown in !help <command>
-    arguments = 0       # max. number of arguments the commands expects
-    permission = 0      # role needed to use the command. 0: everyone, 1: "registered" members, 2: administrators
+    description = ''  # short description, shown in !help
+    usage = ''  # usage/long description, shown in !help <command>
+    arguments = 0  # max. number of arguments the commands expects
+    permission = 0  # role needed to use the command. 0: everyone, 1: "registered" members, 2: administrators
 
     # When the command is used right, this method will be executed.
     @staticmethod
@@ -22,8 +24,10 @@ async def command_check(client, message):
     split = message.content.split(' ')
     command = split[0][1:]
     if command not in commands.keys():
-        await message.author.send(f'```{command} is not a valid command.'
-                                  f'Type {config.prefix}help to get a list of all available commands.```')
+        embed = discord.Embed(title=f'__{command} ist kein verfügbarer Befehl!__',
+                              colour=discord.Colour(0xff0000),
+                              description=f'Type **{config.prefix}** help to get a list of all available commands.')
+        await message.author.send(embed=embed)
         return
 
     try:

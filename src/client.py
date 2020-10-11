@@ -1,5 +1,6 @@
 import asyncio
 import discord
+import timeit
 from commands import command_check
 from confighandler import config, load_guild_config
 from event import check_for_event
@@ -9,6 +10,7 @@ from modules.calendar import ReminderCalendar
 class DiscordClient(discord.Client):
     def __init__(self, **options):
         super().__init__(loop=None, **options)
+        self.timer = timeit.timeit()
 
     async def on_ready(self):
         print("--------------------")
@@ -18,7 +20,6 @@ class DiscordClient(discord.Client):
 
         # Set presence
         await self.change_presence(status=discord.Status.online, activity=discord.Game(config.presence))
-
         # load guild_config
         load_guild_config(self)
 

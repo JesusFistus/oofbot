@@ -9,9 +9,10 @@ from event import user_input
 # TODO: Formatieren
 
 class Setup(commands.Command):
-    description = 'Startet den Setup-Dialog. Hier kannst du dich registrieren, bzw. deine Angaben ändern.```'
-    usage = f'```Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
-            f'bzw. deine Angaben aktualisieren```'
+    description = 'Startet den Setup-Dialog. \n' \
+                  ' Hier kannst du dich registrieren, bzw. deine Angaben ändern.'
+    usage = f'Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
+            f'bzw. deine Angaben aktualisieren#'
 
     @staticmethod
     async def exec(client, message):
@@ -28,6 +29,7 @@ class Setup(commands.Command):
         embed = discord.Embed(description=dialogs['setup_dialog']['begin'],
                               colour=discord.Colour(0x2fb923),
                               title=dialogs['setup_dialog']['title'])
+
         await member.send(embed=embed)
 
         # await name-input
@@ -48,10 +50,10 @@ class Setup(commands.Command):
             for group in semester.study_groups:
                 group_string += group.name + '\n'
 
-            embed.add_field(name=semester.name, value=group_string, inline=False)
+            embed.add_field(name=semester.name, value=group_string, inline=True)
         await member.send(embed=embed)
 
-        flag = 1
+        flag = True
         while flag:
             message = await user_input(member.dm_channel, targetuser=member)
             for study_group in get_study_groups(client.guild):

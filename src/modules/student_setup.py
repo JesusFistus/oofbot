@@ -6,7 +6,7 @@ from confighandler import config, get_study_groups
 from event import user_input
 
 
-#TODO: Formatieren
+# TODO: Formatieren
 
 class Setup(commands.Command):
     description = 'Startet den Setup-Dialog. Hier kannst du dich registrieren, bzw. deine Angaben ändern.```'
@@ -45,7 +45,7 @@ class Setup(commands.Command):
 
         for semester in client.guild.semester:
             group_string = ''
-            for group in semester.groups:
+            for group in semester.study_groups:
                 group_string += group.name + '\n'
 
             embed.add_field(name=semester.name, value=group_string, inline=False)

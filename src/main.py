@@ -2,7 +2,7 @@ import client
 import discord
 from confighandler import config
 
-__version__ = '0.0 testing'
+__version__ = '0.1'
 
 
 print("--------------------")

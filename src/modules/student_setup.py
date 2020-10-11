@@ -36,6 +36,7 @@ class Setup(commands.Command):
         # await name-input
         message = await user_input(member.dm_channel, targetuser=member)
         name = message.content
+        #TODO: Max 32. Char, testen alter
         try:
             await member.edit(nick=name)
         except discord.Forbidden:
@@ -78,3 +79,4 @@ class Setup(commands.Command):
 
 # TODO: Setup zum Einschreiben in Kurse
 # TODO: Anzeige aktiver Kurse
+# TODO: Lösches des Embeds nach Vorlesungsende

@@ -5,7 +5,6 @@ import discord
 import html2text as html2text
 from pytz import timezone
 
-from confighandler import get_study_groups
 from googleapihandler import get_entries
 
 TIMEZONE = timezone('Europe/Berlin')

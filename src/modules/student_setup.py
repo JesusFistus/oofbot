@@ -16,9 +16,9 @@ class Setup(commands.Command):
 
     @staticmethod
     async def exec(client, message):
-        member = get(client.guild.discord_obj.members, id=message.author.id)
+        member = client.guild.discord_obj.fetch_member(message.author.id)
 
-        if type(member) != client.guild.discord_obj.fetch_member():
+        if type(member) != discord.member.Member:
             print('User is not part of the guild, ignoring')
             return
 

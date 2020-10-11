@@ -27,7 +27,6 @@ class Help(commands.Command):
             embed.add_field(name="__Quicklinks:__", value=' [HM-Startseite](https://www.hm.edu/) '
                                                           ' [Moodle](https://moodle.hm.edu/my/) '
                                                           ' [Primus](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm) ')
-            await message.author.send('kot')
             await message.author.send(embed=embed)
 
         elif len(arguments) == 2:

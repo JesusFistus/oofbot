@@ -3,9 +3,9 @@ import yaml
 from discord.utils import get
 
 
-class BotConfig(yaml.YAMLObject):
+class _BotConfig(yaml.YAMLObject):
     # TODO BotConfig Docs
-    """Represents BotConfig.
+    """
 
         Parameters
         -----------

@@ -72,6 +72,7 @@ class Setup(commands.Command):
 
             for study_group in get_study_groups(client.guild):
                 if message.content.upper() == study_group.name:
+                    # TODO: remove decorator roles
                     await member.add_roles(study_group)
                     await member.add_roles(client.guild.student_role_obj)
                     embed = discord.Embed(description=dialogs['setup_dialog']['end'].format(study_group=study_group),

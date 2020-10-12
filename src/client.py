@@ -1,16 +1,15 @@
 import asyncio
 import discord
-import timeit
 from commands import command_check
 from confighandler import config, load_guild_config
 from event import check_for_event
 from modules.calendar import ReminderCalendar
+from modules.student_setup import register_student
 
 
 class DiscordClient(discord.Client):
     def __init__(self, **options):
         super().__init__(loop=None, **options)
-        self.timer = timeit.timeit()
 
     async def on_ready(self):
         print("--------------------")

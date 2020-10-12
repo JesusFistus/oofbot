@@ -46,7 +46,7 @@ class Setup(commands.Command):
         # await name-input
         message = await user_input(member.dm_channel, targetuser=member)
         name = message.content
-        #TODO: Max 32. Char, testen alter
+        # TODO: Max 32. Char, testen alter
         try:
             await member.edit(nick=name)
         except discord.Forbidden:
@@ -86,6 +86,17 @@ class Setup(commands.Command):
             await member.send(embed=embed)
 
 
+async def register_student(member):
+    with open('data/dialogs.yml', 'r', encoding='utf8') as file:
+        dialogs = yaml.load(file, Loader=yaml.Loader)
+
+    name = member.name
+    embed = discord.Embed(description=dialogs['register_dialog']['welcome'].format(name=name),
+                          colour=discord.Colour(0x2fb923),
+                          title=dialogs['register_dialog']['title'])
+    embed.add_field(name='Einführung', value=dialogs['register_dialog']['guide'])
+
+    await member.send(embed=embed)
 
 # TODO: Setup zum Einschreiben in Kurse
 # TODO: Anzeige aktiver Kurse

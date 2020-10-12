@@ -4,11 +4,20 @@ import discord
 
 # TODO Embed
 # TODO Mehr commands
-# TODO
 
 
 # Command Baseclass. Commands must subclass this
 class Command:
+    # TODO: Command Doc
+    """Represents the Command.
+
+        Parameters
+        -----------
+
+        Attributes
+        -----------
+
+        """
     description = ''  # short description, shown in !help
     usage = ''  # usage/long description, shown in !help <command>
     arguments = 0  # max. number of arguments the commands expects

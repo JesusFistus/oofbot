@@ -9,6 +9,16 @@ from event import user_input
 # TODO: Formatieren
 
 class Setup(commands.Command):
+    # TODO: Setup Docs
+    """Represents Setup
+
+        Parameters
+        -----------
+
+        Attributes
+        -----------
+
+        """
     description = 'Startet den Setup-Dialog. \n' \
                   ' Hier kannst du dich registrieren, bzw. deine Angaben ändern.'
     usage = f'Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \

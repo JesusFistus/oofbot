@@ -3,8 +3,6 @@ import yaml
 from discord.utils import get
 
 
-# TODO Vllt auslagern
-
 class BotConfig(yaml.YAMLObject):
     # TODO BotConfig Docs
     """Represents BotConfig.
@@ -30,6 +28,8 @@ with open('data/config.yml', 'r', encoding='utf8') as file:
     print('BotConfig loaded successfully')
 
 
+# TODO Vllt auslagern
+
 class Semester:
     def __init__(self):
         self.year = None
@@ -42,6 +42,7 @@ class Guild:
     def __init__(self, discord_guild):
         self.discord_obj = discord_guild
         self.semester = []
+        self.rules_channel = None
 
 
 def load_guild_config(client):
@@ -51,7 +52,8 @@ def load_guild_config(client):
     if guild_object is None:
         print(f'Bot is not part of a guild with the id = {guild_dict["id"]}. \n aborting.')
         sys.exit()  # TODO: Programmstart abbrechen, Stacktrace sollte aber nicht geprinted werden
-    client.guild = Guild(guild_object)
+    rules_channel = get(client.guilds.discord_obj, id=guild_dict['rules_channel'])
+    client.guild = Guild(guild_object, rules_channel=rules_channel)
     client.guild.semester = []
     for year, semester in guild_dict['semester'].items():
         new_semester = Semester()

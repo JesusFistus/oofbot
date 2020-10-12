@@ -86,17 +86,18 @@ class Setup(commands.Command):
             await member.send(embed=embed)
 
 
-async def register_student(member):
+'''async def register_student(client, member):
     with open('data/dialogs.yml', 'r', encoding='utf8') as file:
         dialogs = yaml.load(file, Loader=yaml.Loader)
 
     name = member.name
-    embed = discord.Embed(description=dialogs['register_dialog']['welcome'].format(name=name),
+
+    embed = discord.Embed(description=dialogs['register_dialog']['welcome'].format(name=name, rules=),
                           colour=discord.Colour(0x2fb923),
                           title=dialogs['register_dialog']['title'])
-    embed.add_field(name='Einführung', value=dialogs['register_dialog']['guide'])
+    #embed.add_field(name='Einführung', value=dialogs['register_dialog']['guide'])
 
-    await member.send(embed=embed)
+    await member.send(embed=embed)'''
 
 # TODO: Setup zum Einschreiben in Kurse
 # TODO: Anzeige aktiver Kurse

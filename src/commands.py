@@ -32,17 +32,21 @@ class Command:
 async def command_check(client, message):
     split = message.content.split(' ')
     command = split[0][1:]
+
     if command not in commands.keys():
         embed = discord.Embed(title=f'__{command} ist kein verfügbarer Befehl!__',
                               colour=discord.Colour(0xff0000),
                               description=f'Type **{config.prefix}** help to get a list of all available commands.')
+
         await message.author.send(embed=embed)
         return
 
     try:
         arguments = split[1:]
+
     except IndexError:
         arguments = ()
+
     if len(arguments) > commands[command].arguments:
         await message.author.send(f'```Wrong usage of {config.prefix}{command}!\n'
                                   f'Type _{config.prefix}help {command}_ to see the usage of the command.```')

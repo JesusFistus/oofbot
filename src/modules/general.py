@@ -1,13 +1,13 @@
 import discord
-
 import commands
-from confighandler import config
+from confighandler import config, dialogs
 
 
 class Help(commands.Command):
     usage = f'usage: {config.prefix}help <command>'
     arguments = 1
 
+    @staticmethod
     async def exec(client, message):
         arguments = message.content.split(' ')
 
@@ -24,9 +24,7 @@ class Help(commands.Command):
                     description = f'{value.description}'
                     embed.add_field(name=keystring, value=description, inline=False)
 
-            embed.add_field(name="__Quicklinks:__", value=' [HM-Startseite](https://www.hm.edu/) '
-                                                          ' [Moodle](https://moodle.hm.edu/my/) '
-                                                          ' [Primus](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm) ')
+            quicklink(client, embed)
             await message.author.send(embed=embed)
 
         elif len(arguments) == 2:
@@ -35,9 +33,7 @@ class Help(commands.Command):
                 embed = discord.Embed(title=arguments[1],
                                       colour=discord.Colour(0xff0000),
                                       description=command_usage)
-                embed.add_field(name="__Quicklinks:__", value='[HM-Startseite](https://www.hm.edu/)'
-                                                              '[Moodle](https://moodle.hm.edu/my/)'
-                                                              '[Primus](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm)')
+                quicklink(client, embed)
                 await message.author.send(embed=embed)
 
             except KeyError:
@@ -51,5 +47,11 @@ class Clear(commands.Command):
     arguments = 2
     permission = 2
 
-    async def exec(dcbot, message):
+    @staticmethod
+    async def exec(client, message):
         pass
+
+
+def quicklink(client: object, embed: object) -> object:
+    embed.add_field(name="__Quicklinks:__", value=client.guild.quicklink)
+    return embed

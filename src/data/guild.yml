@@ -1,5 +1,6 @@
 id: 764463987051724850
 rules_channel: 764463987059589148
+student_id: 764463987051724851
 semester:
   1:
     name: 1.Semester
@@ -23,5 +24,13 @@ semester:
       EIB3A: 764463987051724858
       EIB3B: 764463987051724857
       RE/EM3: 764463987051724855
-      REB3A: 764463987051724855
-      EMB3A: 764463987051724855
+
+
+
+
+
+
+quicklink:  "*[HM-Startseite](https://www.hm.edu/)*
+             |  *[FK 04](https://www.ee.hm.edu/aktuelles/stundenplaene/schwarzesbrett.de.html)*
+             |  *[Moodle](https://moodle.hm.edu/my/)*
+             |  *[Primuss](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm)*"

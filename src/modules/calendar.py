@@ -6,6 +6,7 @@ import html2text as html2text
 from pytz import timezone
 
 from googleapihandler import get_entries
+from modules.general import quicklink
 
 TIMEZONE = timezone('Europe/Berlin')
 
@@ -20,12 +21,20 @@ def create_reminder_embed(entry):
     """Creates a [:class:`discord.Embed`] object from an entry dict and returns it."""
     # Mandatory fields
     try:
-        # TODO: flexible time
-        message_content = f'{entry["organizer"]["displayName"]}: {entry["summary"]} in 30 Minuten!'
-        desc_plain_text = html2text.html2text(entry['description'])
-        start_time = parse_time(entry, 'start')
+        # TODO: flexible time; entry['reminders']['overrides'].get(xyz)['minutes'] oder ['hours'] usw.
+        message_content = f'{entry["organizer"]["displayName"]}: __{entry["summary"]}__ *in 30 Minuten!*'
+        if 'description' in entry:
+            desc_plain_text = html2text.html2text(entry['description'])
+        else:
+            desc_plain_text = None
 
-        message_embed = discord.Embed(description=desc_plain_text, colour=discord.Colour(0x2fb923),
+        start_time = parse_time(entry, 'start')
+        if 'calendarColorId' in entry:
+            embed_color = discord.Colour(int(entry['calendarColorId'].lstrip('#'), 16))
+        else:
+            embed_color = discord.Colour(0x000000)
+
+        message_embed = discord.Embed(description=desc_plain_text, colour=embed_color,
                                       title=message_content)
     except KeyError as e:
         raise e
@@ -44,9 +53,7 @@ def create_reminder_embed(entry):
         duration = end_time - start_time
         message_embed.add_field(name="Dauer", value=(str(duration)[:-3]), inline=True)
         message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
-        message_embed.add_field(name="__Quicklinks:__", value=' [HM-Startseite](https://www.hm.edu/) '
-                                                              ' [Moodle](https://moodle.hm.edu/my/) '
-                                                              ' [Primus](https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhm) ')
+
 
     return message_embed
 
@@ -76,6 +83,7 @@ async def remind(client, entry):
     # Calculate the time when the reminder will be activated
     time = parse_time(entry, 'start')
     time -= datetime.timedelta(minutes=30)
+
     if time <= datetime.datetime.now(tz=TIMEZONE):
         return
 
@@ -89,6 +97,7 @@ async def remind(client, entry):
     # Try to create embed from entry
     try:
         embed = create_reminder_embed(entry)
+        quicklink(client, embed)
     except KeyError:
         print("could not create embed from entry dictionary:\n Ignoring reminder.")
         return
@@ -96,7 +105,7 @@ async def remind(client, entry):
     # Try to get the corresponding announcment_channel and send the embed
     for semester in client.guild.semester:
         for study_group in semester.study_groups:
-            if study_group.name == entry["organizer"]["displayName"]:
+            if study_group.name.lower() in entry["organizer"]["displayName"].lower():
                 await semester.announcment_channel.send(embed=embed)
                 return
     print("could not find a corresponding announcment channel to post the reminder.\n Ignoring reminder")

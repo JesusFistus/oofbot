@@ -4,7 +4,7 @@ from commands import command_check
 from confighandler import config, load_guild_config
 from event import check_for_event
 from modules.calendar import ReminderCalendar
-from modules.student_setup import register_student
+from modules.student_setup import Setup
 
 
 class DiscordClient(discord.Client):
@@ -28,10 +28,10 @@ class DiscordClient(discord.Client):
         # calendar refresher
         while True:
             self.calendar.refresh()
-            await asyncio.sleep(60)
+            await asyncio.sleep(30)
 
     async def on_member_join(self, member):
-        pass
+        await Setup.exec(self, member=member)
 
     async def on_member_delete(self, member):
         pass

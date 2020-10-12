@@ -28,20 +28,18 @@ setup_dialog:
           Gehe sicher, dass du eine der aufgelisteten Studiengruppen eingetippt hast. \n
           Ist deine Studiengruppe nicht dabei? Dann kontaktiere uns bitte!"
 
-register_dialog:
+new_member:
   title: "Herzlich Willkommen!"
 
-  welcome: "Hey {name}, cool, dass dass du unseren Elektrotechnik-Discord-Server gejoint bist! \n
+  welcome: "Hey, cool, dass dass du unseren Elektrotechnik-Discord-Server gejoint bist! \n
             Bevor du auf dem Server loslegen kannst, gibt es ein paar __Dinge die du beachten solltest!__ \n
-            Unter den Textchannel {rules} findest du die wichtigsten Regeln"
+            Unter den Textchannel {rules_channel} findest du die wichtigsten Regeln"
 
   guide: "Wie du bestimmt schon im Willkommensbildschirm gesehen hast, gibt es für jedes Semester eine \n
           eigene Kategorie, in denen du mit Hilfe von Sprach & Textchannel alle wichtigen Informationen \n
           bekommst. \n
-          Zudem findest du unter {News} einen RSS-Feed der Hochschule München. \n
-          Alle grundsätzlichen Informationen findest du unter der Kategorie {Allgemein}. \n
-          Zu guter Letzt gibt es ein Bereich, der sich nur um das Programmieren dreht und \n
-          mit seinem Namen an den ehemaligen HM-Prof Jürgen Plate erinnerin soll!"
+          Zudem findest du unter {news_channel} einen RSS-Feed der Hochschule München. \n
+          Alle grundsätzlichen Informationen findest du unter  {Allgemein}. \n"
 
 # TODO Register_Student
 # TODO Rules

@@ -36,6 +36,8 @@ def get_entries(max_entries_per_calendar=5):
                                          singleEvents=True,
                                          orderBy='startTime').execute()
         for entry in calendar['items']:
+            if 'backgroundColor' in calendar_info:
+                entry['calendarColorId'] = calendar_info['backgroundColor']
             entries.append(entry)
 
     return entries

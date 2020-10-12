@@ -27,6 +27,10 @@ with open('data/config.yml', 'r', encoding='utf8') as file:
     config = yaml.load(file, Loader=yaml.Loader)
     print('BotConfig loaded successfully')
 
+with open('data/dialogs.yml', 'r', encoding='utf8') as file:
+    dialogs = yaml.load(file, Loader=yaml.Loader)
+    print('Dialogs loaded successfully')
+
 
 # TODO Vllt auslagern
 
@@ -42,31 +46,47 @@ class Guild:
     def __init__(self, discord_guild):
         self.discord_obj = discord_guild
         self.semester = []
+        self.quicklink = ''
         self.rules_channel = None
+        self.student_role_obj = None
 
 
 def load_guild_config(client):
     with open('data/guild.yml', 'r', encoding='utf8') as file:
         guild_dict = yaml.load(file, Loader=yaml.Loader)
+
+    # discord.guild object
     guild_object = get(client.guilds, id=guild_dict['id'])
+
+    # Guild not found
     if guild_object is None:
         print(f'Bot is not part of a guild with the id = {guild_dict["id"]}. \n aborting.')
         sys.exit()  # TODO: Programmstart abbrechen, Stacktrace sollte aber nicht geprinted werden
-    rules_channel = get(client.guilds.discord_obj, id=guild_dict['rules_channel'])
-    client.guild = Guild(guild_object, rules_channel=rules_channel)
+
+    # get guild parameter as discord.objects
+    client.guild = Guild(guild_object)
+    client.guild.rules_channel = get(client.guild.discord_obj.text_channels, id=guild_dict['rules_channel'])
+    client.guild.quicklink = guild_dict['quicklink']
+    client.guild.student_role_obj = get(client.guild.discord_obj.roles, id=guild_dict['student_id'])
+
+    # get semester parameter as dict
     client.guild.semester = []
     for year, semester in guild_dict['semester'].items():
         new_semester = Semester()
         new_semester.year = year
         new_semester.name = semester['name']
-        announcment_channel = get(client.guild.discord_obj.text_channels, id=semester['announcment_channel'])
+        announcment_channel = get(client.guild.discord_obj.text_channels, id=semester['announcment_channel'])  # TODO: Don't crash with missing or wrong entries in yml
         new_semester.announcment_channel = announcment_channel
+
         for group_id in semester['groups'].values():
             new_semester.study_groups.append(get(client.guild.discord_obj.roles, id=group_id))
+
         client.guild.semester.append(new_semester)
+
     print(f'Guildconfig for guild "{guild_object.name}" loaded successfully')
 
 
+# yields study groups
 def get_study_groups(guild):
     for semester in guild.semester:
         for study_group in semester.study_groups:

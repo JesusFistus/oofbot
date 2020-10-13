@@ -1,6 +1,6 @@
 import discord
 import commands
-from confighandler import config, dialogs
+from confighandler import config
 
 
 class Help(commands.Command):

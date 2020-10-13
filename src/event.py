@@ -8,24 +8,32 @@ class Event:
         self.inputusers = []
         self.queue = asyncio.Queue()
         self.channel = targetchannel
+
         if type(targetusers) is list:
             self.targetusers = targetusers
+
         else:
             self.targetusers = [targetusers]
+
         self.check_current_events()
         eventlist.append(self)
 
     async def input(self, targetusers=None):
         if targetusers is None:
             self.inputusers = self.targetusers
+
         elif type(targetusers) == list:
             self.inputusers = targetusers
+
         else:
             self.inputusers = [targetusers]
+
         message = await self.queue.get()
+
         if message.content == '#':
             self.kill()
             return
+
         return message
 
     def kill(self):

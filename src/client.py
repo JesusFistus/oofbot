@@ -3,11 +3,13 @@ import discord
 from commands import command_check
 from confighandler import config, load_guild_config
 from event import check_for_event
-from modules.calendar import ReminderCalendar
+from modules.calendar import Calendar
 from modules.student_setup import Setup
 
 
 class DiscordClient(discord.Client):
+    calendar: Calendar
+
     def __init__(self, **options):
         super().__init__(loop=None, **options)
 
@@ -23,7 +25,7 @@ class DiscordClient(discord.Client):
         load_guild_config(self)
 
         # create Calendar object
-        self.calendar = ReminderCalendar(self)
+        self.calendar = Calendar(self)
 
         # calendar refresher
         while True:
@@ -39,9 +41,11 @@ class DiscordClient(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
+
         if message.content.startswith(config.prefix):
             await command_check(self, message)
             return
+
         await check_for_event(message)
 
     async def on_voice_state_update(self, member, before, after):

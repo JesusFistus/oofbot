@@ -23,14 +23,18 @@ def create_reminder_embed(entry):
     try:
         # TODO: flexible time; entry['reminders']['overrides'].get(xyz)['minutes'] oder ['hours'] usw.
         message_content = f'{entry["organizer"]["displayName"]}: __{entry["summary"]}__ *in 30 Minuten!*'
+
         if 'description' in entry:
             desc_plain_text = html2text.html2text(entry['description'])
+
         else:
             desc_plain_text = None
 
         start_time = parse_time(entry, 'start')
+
         if 'calendarColorId' in entry:
             embed_color = discord.Colour(int(entry['calendarColorId'].lstrip('#'), 16))
+
         else:
             embed_color = discord.Colour(0x000000)
 
@@ -91,6 +95,7 @@ async def remind(client, entry):
     try:
         await _wait_until(time)
         # print(f'{entry["summary"]} successfully triggered')
+
     except asyncio.CancelledError:
         raise
 
@@ -98,6 +103,7 @@ async def remind(client, entry):
     try:
         embed = create_reminder_embed(entry)
         quicklink(client, embed)
+
     except KeyError:
         print("could not create embed from entry dictionary:\n Ignoring reminder.")
         return
@@ -111,7 +117,7 @@ async def remind(client, entry):
     print("could not find a corresponding announcment channel to post the reminder.\n Ignoring reminder")
 
 
-class ReminderCalendar:
+class Calendar:
     """Represents a calendar that retrieves calendar entries from google kalender and sets corresponding reminders.
 
     Parameters
@@ -125,7 +131,11 @@ class ReminderCalendar:
     reminders:  a list which contains all active reminders
     """
 
-    def __init__(self, client):
+    def __init__(self, client) -> object:
+        """
+
+        :rtype: object
+        """
         self.client = client
         self.reminders = []
 

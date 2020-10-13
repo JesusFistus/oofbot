@@ -1,6 +1,5 @@
 import client
 import discord
-import timeit
 from confighandler import config
 
 __version__ = '0.1'

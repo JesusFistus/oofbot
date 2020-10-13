@@ -8,7 +8,7 @@ from event import user_input
 
 class Setup(commands.Command):
     # TODO: Setup Docs
-    """Represents Setup
+    """Represents the Setup Command.
 
         Parameters
         -----------
@@ -26,6 +26,8 @@ class Setup(commands.Command):
     async def exec(client, message=None, member=None):
         if message:
             member = await client.guild.discord_obj.fetch_member(message.author.id)
+
+        # check if member is part of the guild
         if type(member) != discord.member.Member:
             print('User is not part of the guild, ignoring')
             return
@@ -43,6 +45,7 @@ class Setup(commands.Command):
 
         # TODO: Max 32. Char, testen alter
 
+        # change name to user_message
         try:
             await member.edit(nick=name)
 
@@ -54,12 +57,14 @@ class Setup(commands.Command):
                               colour=discord.Colour(0x2fb923),
                               title=dialogs['setup_dialog']['title'])
 
+        # list of all available study_group
         for semester in client.guild.semester:
             group_string = ''
 
             for group in semester.study_groups:
                 group_string += group.name + '\n'
 
+            # create field for every semester
             embed.add_field(name=semester.name, value=group_string, inline=True)
 
         await member.send(embed=embed)
@@ -71,10 +76,25 @@ class Setup(commands.Command):
             message = await user_input(member.dm_channel, targetuser=member)
 
             for study_group in get_study_groups(client.guild):
+
+                # add role corresponding to message_content
                 if message.content.upper() == study_group.name:
-                    # TODO: remove decorator roles
+                    for member_role in member.roles:
+                        if member_role == study_group:
+
+                            # remove study_groups from member
+                            # TODO: HELP! Entfernt nicht die Rolle
+                            try:
+                                await member.remove_roles(member_role, atomic=True)
+                                print('nice')
+                            except:
+                                print('madig')
+
+                    # set member roles to student & input study_group
                     await member.add_roles(study_group)
                     await member.add_roles(client.guild.student_role_obj)
+
+                    # embed after succesful setup_completion
                     embed = discord.Embed(description=dialogs['setup_dialog']['end'].format(study_group=study_group),
                                           colour=discord.Colour(0x2fb923),
                                           title=dialogs['setup_dialog']['title'])
@@ -82,10 +102,12 @@ class Setup(commands.Command):
                     await member.send(embed=embed)
                     return
 
-                else:
-                    embed = discord.Embed(description=dialogs['setup_dialog']['error'].format(message=message.content),
-                                          colour=discord.Colour(0x2fb923),
-                                          title=dialogs['setup_dialog']['title'])
+            else:
+                # error_message for invalid message
+                embed = discord.Embed(description=dialogs['setup_dialog']['error'].format(message=message.content),
+                                        colour=discord.Colour(0x2fb923),
+                                        title=dialogs['setup_dialog']['title'])
+
             await member.send(embed=embed)
 
 # TODO: Setup zum Einschreiben in Kurse

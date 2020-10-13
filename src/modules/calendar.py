@@ -58,7 +58,6 @@ def create_reminder_embed(entry):
         message_embed.add_field(name="Dauer", value=(str(duration)[:-3]), inline=True)
         message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
 
-
     return message_embed
 
 

@@ -1,25 +1,33 @@
 id: 693026933293711386
+
 rules_channel: 759147979759157249
 student_id: 735433748706754571
+
 semester:
+
   1:
     name: 1.Semester
     announcment_channel: 762687257228345405
+
     groups:
       BAC1A: 765136211063865355
       BAC1B: 765136253799890994
       BAC1C: 765136288486916126
       BAC1D: 765136392320712724
+
   2:
     name: 2.Semester
-    announcment_channel: 761215720087879701
+    announcment_channel: 760750750178607105
+
     groups:
-      BAC2B: 762744835974234163
-      BAC2A: 762988377145868298
+      BAC2A: 762744835974234163
+      BAC2B: 762988377145868298
       2W: 760824863862292510
+
   3:
     name: 3.Semester
-    announcment_channel: 735426843997372496
+    announcment_channel: 761213483915411478
+
     groups:
       EIB3A: 735417761395900507
       EIB3B: 735418166372466688
@@ -27,17 +35,12 @@ semester:
 
   4:
     name: 4.Semester
-    announcment_channel:
-    groups: 765503626491068458
+    announcment_channel: 765503626491068458
+
+    groups:
       EIB4A: 765503681705279500
       REB4A: 765503988413366302
       EMB4A: 765504089101959168
-
-
-
-
-
-
 
 
 quicklink:  "*[HM-Startseite](https://www.hm.edu/)*

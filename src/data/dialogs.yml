@@ -2,17 +2,17 @@ setup_dialog:
   title: "Studenten-Setup"
 
   begin: "Willkommen im Studenten-Setup zur automatischen \n
-          Rollenzuweisung unseres EIT-Servers. \n
+          Rollenzuweisung unseres EIT-Servers! \n
           \n
           Das Setup ist dafür da, dass wir auch innerhalb \n
-          des Servers wissen wer du bist und die wichtigsten \n
-          Informationen direkt auf deine Studiengruppe \n
-          angepasst werden. \n
+          des Servers wissen wer du bist und die __wichtigen \n
+          Informationen auf deine Studiengruppe \n
+          angepasst__ werden! \n
           \n
-          Deine Angaben werden __intern nicht gespeichert__, \n
-          sondern direkt im EIT-Server geändert. \n
+          *Deine Angaben werden __intern nicht gespeichert__, \n
+          sondern direkt im EIT-Server geändert.* \n
           \n
-          **Fang bitte mit deinem Namen an**"
+          **Fang bitte mit deinem Namen an!**"
 
   group_selection: "Hallo **{name}**,
           gib jetzt bitte noch deine Studiengruppe an, \n

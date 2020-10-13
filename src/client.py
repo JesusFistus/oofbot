@@ -25,6 +25,8 @@ class DiscordClient(discord.Client):
         # Set presence
         await self.change_presence(status=discord.Status.online, activity=discord.Game(config.presence))
 
+        for member in self.guild.discord_obj.members:
+            print(member.name)
         # create Calendar object
         self.calendar = Calendar(self)
 

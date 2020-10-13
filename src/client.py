@@ -27,6 +27,12 @@ class DiscordClient(discord.Client):
 
         for member in self.guild.discord_obj.members:
             print(member.name)
+
+        print("-------------")
+
+        async for member in self.guild.discord_obj.fetch_members(limit=150):
+            print(member.name)
+
         # create Calendar object
         self.calendar = Calendar(self)
 

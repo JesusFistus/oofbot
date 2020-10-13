@@ -5,14 +5,14 @@ setup_dialog:
           Rollenzuweisung unseres EIT-Servers! \n
           \n
           Das Setup ist dafür da, dass wir auch innerhalb \n
-          des Servers wissen wer du bist und die __wichtigen \n
+          des Servers wissen, wer du bist und die __wichtigen \n
           Informationen auf deine Studiengruppe \n
           angepasst__ werden! \n
           \n
           *Deine Angaben werden __intern nicht gespeichert__, \n
           sondern direkt im EIT-Server geändert.* \n
           \n
-          **Fang bitte mit deinem Namen an!**"
+          **Fang bitte mit deinem vollständigen Namen (Vorname + Nachname) an!**"
 
   group_selection: "Hallo **{name}**,
           gib jetzt bitte noch deine Studiengruppe an, \n
@@ -29,10 +29,11 @@ setup_dialog:
          __Falls etwas mit deiner Eingabe nicht stimmt, \n
          führe bitte einfach nochmal das Setup aus und pass deine Eingabe an!__"
 
-  error:  "Hoppla!
-          Wie es scheint ist {message} keine gültige Studiengruppe. \n
-          Gehe sicher, dass du eine der aufgelisteten Studiengruppen eingetippt hast. \n
-          Ist deine Studiengruppe nicht dabei? Dann kontaktiere uns bitte!"
+  error:  "Hoppla! \n
+          Wie es scheint, ist {message} keine gültige Studiengruppe. \n
+          Probiere es bitte nochmal mit einer Studiengruppe aus der Liste! \n
+          Ist deine Studiengruppe nicht dabei? \n
+          Dann kontaktiere bitte einen Admin (mit rotem Namen auf dem Server)!"
 
 new_member:
   title: "Herzlich Willkommen!"

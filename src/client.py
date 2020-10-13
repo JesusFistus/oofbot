@@ -6,6 +6,8 @@ from event import _check_for_event
 from modules.calendar import Calendar
 from modules.student_setup import Setup
 
+# TODO: Discord Intents
+
 
 class DiscordClient(discord.Client):
 
@@ -24,14 +26,6 @@ class DiscordClient(discord.Client):
 
         # Set presence
         await self.change_presence(status=discord.Status.online, activity=discord.Game(config.presence))
-
-        for member in self.guild.discord_obj.members:
-            print(member.name)
-
-        print("-------------")
-
-        async for member in self.guild.discord_obj.fetch_members(limit=150):
-            print(member.name)
 
         # create Calendar object
         self.calendar = Calendar(self)

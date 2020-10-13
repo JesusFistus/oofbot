@@ -1,6 +1,7 @@
 import client
-import discord
 from confighandler import config
+import discord
+
 
 __version__ = '1.0'
 

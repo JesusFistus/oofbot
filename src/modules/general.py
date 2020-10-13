@@ -11,7 +11,7 @@ class Help(commands.Command):
     async def exec(client, message):
         arguments = message.content.split(' ')
 
-        if len(arguments) == 1:
+        if len(arguments) == 1:  # TODO: get text from dialogs.yml 
             embed = discord.Embed(title='Verfügbare Befehle:',
                                   colour=discord.Colour(0xff0000),
                                   description='_Für eine ausführe Beschreibund der Befehle tippe:_ \n '
@@ -36,7 +36,7 @@ class Help(commands.Command):
                 quicklink(client, embed)
                 await message.author.send(embed=embed)
 
-            except KeyError:
+            except KeyError:  # TODO: Send Embed instead of text and get text from dialogs.yml!
                 await message.author.send(f'{arguments[1]} is not a valid command.'
                                           f'Type {config.prefix}help to get a list of all available commands.')
 

@@ -17,7 +17,8 @@ setup_dialog:
 
   group_selection: "Hallo **{name}**,
           gib jetzt bitte noch deine Studiengruppe an, \n
-          damit wir dich richtig zuordnen können. \n
+          damit wir dich richtig zuordnen können.\n
+          Anworte einfach mit einem der untenstehenden Studiengruppen!\n
           \n
           __Folgende Studiengruppen stehen zur Auswahl:__"
 

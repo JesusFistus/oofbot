@@ -14,7 +14,3 @@ print(__version__)
 
 client = client.DiscordClient()
 client.run(config.token)
-
-
-# TODO: Kommentare für alles
-# TODO: Für GitHub öffentlich vorbereiten

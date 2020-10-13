@@ -8,10 +8,10 @@ from modules.student_setup import Setup
 
 
 class DiscordClient(discord.Client):
-    calendar: Calendar
 
     def __init__(self, **options):
         super().__init__(loop=None, **options)
+        pass
 
     async def on_ready(self):
         # load guild_config

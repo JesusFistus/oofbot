@@ -12,7 +12,8 @@ setup_dialog:
           *Deine Angaben werden __intern nicht gespeichert__, \n
           sondern direkt im EIT-Server geändert.* \n
           \n
-          **Fang bitte mit deinem vollständigen Namen (Vorname + Nachname) an!**"
+          **Antworte jetzt bitte mit deinem vollständigen Namen (Vorname + Nachname)!**\n
+          (Unten ist ein Eingabefeld, in dem du antworten kannst)."
 
   group_selection: "Hallo **{name}**,
           gib jetzt bitte noch deine Studiengruppe an, \n

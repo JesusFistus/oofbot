@@ -79,7 +79,7 @@ class Setup(commands.Command):
 
                 # add role corresponding to message_content
                 if message.content.upper() == study_group.name:
-                    for member_role in member.roles:
+                    """for member_role in member.roles:
                         if member_role == study_group:
 
                             # remove study_groups from member
@@ -88,7 +88,7 @@ class Setup(commands.Command):
                                 await member.remove_roles(member_role, atomic=True)
                                 print('nice')
                             except:
-                                print('madig')
+                                print('madig')"""
 
                     # set member roles to student & input study_group
                     await member.add_roles(study_group)

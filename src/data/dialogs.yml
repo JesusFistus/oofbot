@@ -31,11 +31,16 @@ setup_dialog:
          __Falls etwas mit deiner Eingabe nicht stimmt, \n
          führe bitte einfach nochmal das Setup aus und pass deine Eingabe an!__"
 
-  error:  "Hoppla! \n
+  study_group_invalid:  "Hoppla! \n
           Wie es scheint, ist {message} keine gültige Studiengruppe. \n
           Probiere es bitte nochmal mit einer Studiengruppe aus der Liste! \n
           Ist deine Studiengruppe nicht dabei? \n
           Dann kontaktiere bitte einen Admin (mit rotem Namen auf dem Server)!"
+
+  name_to_long:  "Hoppla! \n
+          Dein eingegebener Name ist zu lang.\n
+          Gehe Sicher, dass deine Eingabe nicht länger als 32 Zeichen ist."
+  
 
 new_member:
   title: "Herzlich Willkommen!"
@@ -50,7 +55,5 @@ new_member:
           Zudem findest du unter {news_channel} einen RSS-Feed der Hochschule München. \n
           Alle grundsätzlichen Informationen findest du unter {Allgemein}. \n"
 
-# TODO Register_Student
-# TODO Rules
 # TODO Formatieren
 # TODO Multilingual

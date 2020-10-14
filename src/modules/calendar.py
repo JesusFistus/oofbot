@@ -58,7 +58,6 @@ def create_reminder_embed(entry):
         message_embed.add_field(name="Dauer", value=(str(duration)[:-3]), inline=True)
         message_embed.add_field(name="Endzeit", value=end_time.strftime("%H:%M"), inline=True)
 
-
     return message_embed
 
 
@@ -131,22 +130,17 @@ class Calendar:
     reminders:  a list which contains all active reminders
     """
 
-    def __init__(self, client) -> object:
-        """
-
-        :rtype: object
-        """
+    def __init__(self, client):
         self.client = client
         self.reminders = []
 
-        self.refresh()
-
-    def refresh(self):
+    async def refresh(self):
         """Fetches all google calendar entries and tries to set a reminder for each entry.
         If a fetched entry is already set as a reminder, the reminder will be overwritten."""
 
         # Fetches the next 5 entries per calendar
-        entries = get_entries()
+        loop = asyncio.get_running_loop()
+        entries = await loop.run_in_executor(None, get_entries)
 
         # Set a reminder for every entry
         for entry in entries:

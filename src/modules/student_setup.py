@@ -1,7 +1,7 @@
 import discord
 import commands
 from confighandler import config, get_study_groups, dialogs
-from event import user_input
+from event import user_input, EventError
 
 
 # TODO: Formatieren
@@ -40,7 +40,12 @@ class Setup(commands.Command):
         await member.send(embed=embed)
 
         # await name-input
-        message = await user_input(member.dm_channel, targetuser=member)
+        try:
+            message = await user_input(member.dm_channel, member)
+        except EventError as e:
+            print(e)
+            return
+
         name = message.content
 
         # TODO: Max 32. Char, testen alter
@@ -73,7 +78,11 @@ class Setup(commands.Command):
         flag = True
 
         while flag:
-            message = await user_input(member.dm_channel, targetuser=member)
+            try:
+                message = await user_input(member.dm_channel, member)
+            except EventError as e:
+                print(e)
+                return
 
             for study_group in get_study_groups(client.guild):
 

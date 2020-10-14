@@ -53,5 +53,5 @@ class Clear(commands.Command):
 
 
 def quicklink(client: object, embed: object) -> object:
-    embed.add_field(name="__Quicklinks:__", value=client.guild.quicklink)
+    embed.add_field(name="__Quicklinks:__", value=client.guild.quicklinks)
     return embed

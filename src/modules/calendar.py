@@ -111,7 +111,7 @@ async def remind(client, entry):
     for semester in client.guild.semester:
         for study_group in semester.study_groups:
             if study_group.name.lower() in entry["organizer"]["displayName"].lower():
-                await semester.announcment_channel.send(embed=embed)
+                await semester.announcement_channel.send(embed=embed)
                 return
     print("could not find a corresponding announcment channel to post the reminder.\n Ignoring reminder")
 

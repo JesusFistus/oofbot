@@ -1,6 +1,6 @@
 import asyncio
 import discord
-from commands import command_check
+from commands import command_handler
 from confighandler import config, load_guild_config
 from event import _check_for_event
 from modules.calendar import Calendar
@@ -42,14 +42,12 @@ class DiscordClient(discord.Client):
         pass
 
     async def on_message(self, message):
+        # ignore own messages
         if message.author == self.user:
             return
 
         if message.content.startswith(config.prefix):
-            await command_check(self, message)
+            await command_handler(self, message)
             return
 
         await _check_for_event(message)
-
-    async def on_voice_state_update(self, member, before, after):
-        pass

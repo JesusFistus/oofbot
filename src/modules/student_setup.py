@@ -3,19 +3,26 @@ import commands
 from confighandler import config, get_study_groups, dialogs
 from event import user_input, EventError
 
-# TODO: NEEDS TESTING
-
-
-# TODO: formatieren & dokumentieren
 
 class Setup(commands.Command):
     description = 'Startet den Setup-Dialog. \n' \
                   ' Hier kannst du dich registrieren, bzw. deine Angaben ändern.'
     usage = f'Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
-            f'bzw. deine Angaben aktualisieren#'
+            f'bzw. deine Angaben aktualisieren'
 
     @staticmethod
     async def exec(client, message=None, member=None):
+        """
+        Gets executed when the setup command is issued. See module commands.py for more information.
+
+        Args:
+            client:
+            message:
+            member:
+
+        Returns:
+
+        """
         if message:
             member = await client.guild.discord_obj.fetch_member(message.author.id)
 
@@ -34,7 +41,8 @@ class Setup(commands.Command):
         while True:
             # Wait for User input
             try:
-                name = await user_input(member.dm_channel, member)
+                message = await user_input(member.dm_channel, member)
+                name = message.content
             except EventError as e:
                 print(e)
                 return
@@ -73,8 +81,6 @@ class Setup(commands.Command):
 
         await member.send(embed=embed)
 
-        study_groups = get_study_groups(client.guild)
-
         flag = True
 
         # loop until User tiped in a valid study_group
@@ -87,7 +93,7 @@ class Setup(commands.Command):
                 return
 
             # Check if User tiped in a valid study_group
-            for study_group in study_groups:
+            for study_group in get_study_groups(client.guild):
                 if message.content.upper() == study_group.name:
                     # break loop if input is a valid study_group
                     chosen_study_group = study_group
@@ -102,17 +108,17 @@ class Setup(commands.Command):
                 await member.send(embed=embed)
 
         # On successful study_group selection, give User the student role
-        await member.add_roles(client.guild.student_role_obj)
+        await member.add_roles(client.guild.student_role)
 
         # Check if User already has study_group roles, if so, remove them
         for role in member.roles:
-            if role in study_groups:
+            if role in get_study_groups(client.guild):
                 await member.remove_roles(role)
 
         # set members study_group according to chosen study_group
         try:
             await member.add_roles(chosen_study_group)
-        except TypeError:
+        except NameError:
             print(f'Something went wrong in setup of User "{member.name}".\n Aborting setup')
             return
 

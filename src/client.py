@@ -3,7 +3,7 @@ import discord
 from commands import command_handler
 from confighandler import config, load_guild_config
 from event import _check_for_event
-from modules.calendar import Calendar
+from modules.student_calendar import Calendar
 from modules.student_setup import Setup
 
 # TODO: Discord Intents

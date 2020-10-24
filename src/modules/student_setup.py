@@ -1,29 +1,28 @@
 import discord
 import commands
-from confighandler import config, get_study_groups, dialogs
+from confighandler import config, dialogs
 from event import user_input, EventError
 
 
-# TODO: Formatieren
-
 class Setup(commands.Command):
-    # TODO: Setup Docs
-    """Represents the Setup Command.
-
-        Parameters
-        -----------
-
-        Attributes
-        -----------
-
-        """
     description = 'Startet den Setup-Dialog. \n' \
                   ' Hier kannst du dich registrieren, bzw. deine Angaben ändern.'
     usage = f'Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
-            f'bzw. deine Angaben aktualisieren#'
+            f'bzw. deine Angaben aktualisieren'
 
     @staticmethod
     async def exec(client, message=None, member=None):
+        """
+        Gets executed when the setup command is issued. See module commands.py for more information.
+
+        Args:
+            client:
+            message:
+            member:
+
+        Returns:
+
+        """
         if message:
             member = await client.guild.discord_obj.fetch_member(message.author.id)
 
@@ -36,33 +35,41 @@ class Setup(commands.Command):
         embed = discord.Embed(description=dialogs['setup_dialog']['begin'],
                               colour=discord.Colour(0x2fb923),
                               title=dialogs['setup_dialog']['title'])
-
         await member.send(embed=embed)
 
-        # await name-input
-        try:
-            message = await user_input(member.dm_channel, member)
-        except EventError as e:
-            print(e)
-            return
+        # loop until User tiped in a valid name
+        while True:
+            # Wait for User input
+            try:
+                message = await user_input(member.dm_channel, member)
+                name = message.content
+            except EventError as e:
+                print(e)
+                return
 
-        name = message.content
+            # Check if User tiped in a valid name
+            if len(name) < 32:
+                break
+            else:
+                # send message if User did not type in a valid study_group, the User will be asked to try again
+                embed = discord.Embed(
+                    description=dialogs['setup_dialog']['name_to_long'].format(message=message.content),
+                    colour=discord.Colour(0x2fb923),
+                    title=dialogs['setup_dialog']['title'])
+                await member.send(embed=embed)
 
-        # TODO: Max 32. Char, testen alter
-
-        # change name to user_message
+        # change Users Nickname to tiped in Name
         try:
             await member.edit(nick=name)
-
         except discord.Forbidden:
-            pass
+            print(f'Could not change Nickname of User "{member.name}".\n Ignoring')
 
-        # send group_selection message
+        # create group_selection embed
         embed = discord.Embed(description=dialogs['setup_dialog']['group_selection'].format(name=name),
                               colour=discord.Colour(0x2fb923),
                               title=dialogs['setup_dialog']['title'])
 
-        # list of all available study_group
+        # add embed_fields acording to study_groups in guildconfig
         for semester in client.guild.semester:
             group_string = ''
 
@@ -74,51 +81,54 @@ class Setup(commands.Command):
 
         await member.send(embed=embed)
 
-        # loop until group_selection ended
         flag = True
 
+        # loop until User tiped in a valid study_group
         while flag:
+            # Wait for user input
             try:
                 message = await user_input(member.dm_channel, member)
             except EventError as e:
                 print(e)
                 return
 
-            for study_group in get_study_groups(client.guild):
-
-                # add role corresponding to message_content
+            # Check if User tiped in a valid study_group
+            for study_group in client.guild.get_study_groups():
                 if message.content.upper() == study_group.name:
-                    """for member_role in member.roles:
-                        if member_role == study_group:
 
-                            # remove study_groups from member
-                            # TODO: HELP! Entfernt nicht die Rolle
-                            try:
-                                await member.remove_roles(member_role, atomic=True)
-                                print('nice')
-                            except:
-                                print('madig')"""
-
-                    # set member roles to student & input study_group
-                    await member.add_roles(study_group)
-                    await member.add_roles(client.guild.student_role_obj)
-
-                    # embed after succesful setup_completion
-                    embed = discord.Embed(description=dialogs['setup_dialog']['end'].format(study_group=study_group),
-                                          colour=discord.Colour(0x2fb923),
-                                          title=dialogs['setup_dialog']['title'])
-
-                    await member.send(embed=embed)
-                    return
-
+                    # break loop if input is a valid study_group
+                    chosen_study_group = study_group
+                    flag = False
+                    break
             else:
-                # error_message for invalid message
-                embed = discord.Embed(description=dialogs['setup_dialog']['error'].format(message=message.content),
-                                        colour=discord.Colour(0x2fb923),
-                                        title=dialogs['setup_dialog']['title'])
+                # send message if User did not type in a valid study_group, the User will be asked to try again
+                embed = discord.Embed(
+                    description=dialogs['setup_dialog']['study_group_invalid'].format(message=message.content),
+                    colour=discord.Colour(0x2fb923),
+                    title=dialogs['setup_dialog']['title'])
+                await member.send(embed=embed)
 
-            await member.send(embed=embed)
+        # On successful study_group selection, give User the student role
+        await member.add_roles(client.guild.student_role)
+
+        # Check if User already has study_group roles, if so, remove them
+        for role in member.roles:
+            if role in client.guild.get_study_groups():
+                await member.remove_roles(role)
+
+        # set members study_group according to chosen study_group
+        try:
+            await member.add_roles(chosen_study_group)
+        except NameError:
+            print(f'Something went wrong in setup of User "{member.name}".\n Aborting setup')
+            return
+
+        # send embed after setup completed successfully
+        embed = discord.Embed(description=dialogs['setup_dialog']['end'].format(study_group=study_group),
+                              colour=discord.Colour(0x2fb923),
+                              title=dialogs['setup_dialog']['title'])
+
+        await member.send(embed=embed)
 
 # TODO: Setup zum Einschreiben in Kurse
 # TODO: Anzeige aktiver Kurse
-# TODO: Lösches des Embeds nach Vorlesungsende

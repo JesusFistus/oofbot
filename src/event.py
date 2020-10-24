@@ -10,10 +10,10 @@ STOPKEY = '#'
 
 async def user_input(channel, user):
     """
-
-    Args:
-        channel: Discord Channel Object the event is listening on
-        user: Discord Member Object the event listens to
+    Parameters
+    ----------
+    channel:    discord.TextChanel object the event is listening on
+    user:       discord.Member object the event listens to
 
     Returns:
         The "cought" Discord Message Object
@@ -77,7 +77,7 @@ class UserInputEvent:
         for event in eventlist:
             if event.channel == self.channel:
                 event._kill()
-                #raise EventError(f'There\'s already an ongoing event in this channel: {str(event.channel)}')
+                # raise EventError(f'There\'s already an ongoing event in this channel: {str(event.channel)}')
             elif event.user == self.user:
                 event._kill()
-                #raise EventError(f'There\'s already an ongoing event for this user: {str(event.user)}')
+                # raise EventError(f'There\'s already an ongoing event for this user: {str(event.user)}')

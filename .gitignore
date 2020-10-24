@@ -128,7 +128,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# own shit
+# ide thingies
 .idea/
 .vscode/
-src/data/
+
+# config files
+src/data/config.yml
+src/data/guild.yml
+src/data/test_guild.yml
+src/data/google/

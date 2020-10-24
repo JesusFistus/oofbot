@@ -12,6 +12,16 @@ SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 
 def get_entries(max_entries_per_calendar=5):
+    """
+
+    Parameters
+    ----------
+    max_entries_per_calendar
+
+    Returns
+    -------
+
+    """
     creds = None
 
     if os.path.exists('data/google/token.pickle'):

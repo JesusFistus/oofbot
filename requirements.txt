@@ -7,4 +7,5 @@ asyncio~=3.4.3
 python-dateutil~=2.8.1
 pytz~=2020.1
 google~=3.0.0
-html2text
+html2text~=2020.1.16
+feedparser~=6.0.1

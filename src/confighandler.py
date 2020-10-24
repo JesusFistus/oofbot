@@ -76,7 +76,7 @@ class Guild:
 
 # TODO: rewrite
 def load_guild_config(client):
-    with open('data/guild.yml', 'r', encoding='utf8') as file:
+    with open('data/test_guild.yml', 'r', encoding='utf8') as file:
         guild_dict = yaml.load(file, Loader=yaml.Loader)
 
     # discord.guild object
@@ -98,8 +98,8 @@ def load_guild_config(client):
     for year, semester in guild_dict['semester'].items():
         new_semester = Semester()
         new_semester.name = semester['name']
-        announcment_channel = get(client.guild.discord_obj.text_channels, id=semester['announcment_channel'])  # TODO: Don't crash with missing or wrong entries in yml
-        new_semester.announcement_channel = announcment_channel
+        announcement_channel = get(client.guild.discord_obj.text_channels, id=semester['announcement_channel'])  # TODO: Don't crash with missing or wrong entries in yml
+        new_semester.announcement_channel = announcement_channel
 
         for group_id in semester['groups'].values():
             new_semester.study_groups.append(get(client.guild.discord_obj.roles, id=group_id))

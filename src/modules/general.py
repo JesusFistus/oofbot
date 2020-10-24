@@ -14,7 +14,7 @@ class Help(commands.Command):
         if len(arguments) == 1:  # TODO: get text from dialogs.yml 
             embed = discord.Embed(title='Verfügbare Befehle:',
                                   colour=discord.Colour(0xff0000),
-                                  description='_Für eine ausführe Beschreibund der Befehle tippe:_ \n '
+                                  description='_Für eine ausführliche Beschreibung der Befehle tippe:_ \n '
                                               '\n'
                                               ' #help <Befehl>')
 

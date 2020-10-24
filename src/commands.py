@@ -3,7 +3,6 @@ import discord
 
 
 # TODO Embed
-# TODO Mehr commands
 
 
 # Command Baseclass. Commands must subclass this

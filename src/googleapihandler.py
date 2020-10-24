@@ -11,16 +11,16 @@ import datetime
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 
-def get_entries(max_entries_per_calendar=5):
-    """
+def get_entries(limit=3):
+    """ Fetches upcoming calendar entries
 
     Parameters
     ----------
-    max_entries_per_calendar
+    limit:  The maximum amount of calendar entries fetched per calendar
 
     Returns
     -------
-
+    A flattened list of calendar entries
     """
     creds = None
 
@@ -50,7 +50,7 @@ def get_entries(max_entries_per_calendar=5):
 
     for calendar_info in calendars_result['items']:
         calendar = service.events().list(calendarId=calendar_info['id'], timeMin=now,
-                                         maxResults=max_entries_per_calendar,
+                                         maxResults=limit,
                                          singleEvents=True,
                                          orderBy='startTime').execute()
 

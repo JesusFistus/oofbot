@@ -1,6 +1,6 @@
 import discord
 import commands
-from confighandler import config, get_study_groups, dialogs
+from confighandler import config, dialogs
 from event import user_input, EventError
 
 
@@ -93,7 +93,7 @@ class Setup(commands.Command):
                 return
 
             # Check if User tiped in a valid study_group
-            for study_group in get_study_groups(client.guild):
+            for study_group in client.guild.get_study_groups():
                 if message.content.upper() == study_group.name:
                     # break loop if input is a valid study_group
                     chosen_study_group = study_group
@@ -112,7 +112,7 @@ class Setup(commands.Command):
 
         # Check if User already has study_group roles, if so, remove them
         for role in member.roles:
-            if role in get_study_groups(client.guild):
+            if role in client.guild.get_study_groups():
                 await member.remove_roles(role)
 
         # set members study_group according to chosen study_group

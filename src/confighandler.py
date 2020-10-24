@@ -31,7 +31,6 @@ with open('data/dialogs.yml', 'r', encoding='utf8') as file:
 
 
 # TODO: auslagern
-
 class Semester:
     """ Represents a semester
 
@@ -75,9 +74,9 @@ class Guild:
                 yield study_group
 
 
-# TODO: rewrite, documentation
+# TODO: rewrite
 def load_guild_config(client):
-    with open('data/test_guild.yml', 'r', encoding='utf8') as file:
+    with open('data/guild.yml', 'r', encoding='utf8') as file:
         guild_dict = yaml.load(file, Loader=yaml.Loader)
 
     # discord.guild object
@@ -108,10 +107,3 @@ def load_guild_config(client):
         client.guild.semester.append(new_semester)
 
     print(f'Guildconfig for guild "{guild_object.name}" loaded successfully')
-
-
-# TODO: auf guild.get_study_groups ändern
-def get_study_groups(guild):
-    for semester in guild.semester:
-        for study_group in semester.study_groups:
-            yield study_group

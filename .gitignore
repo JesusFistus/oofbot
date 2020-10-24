@@ -130,6 +130,5 @@ dmypy.json
 
 # own shit
 .idea/
-.vscode
-src/data/google/token.pickle
-
+.vscode/
+src/data/

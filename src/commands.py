@@ -8,7 +8,6 @@ import discord
 
 # Command Baseclass. Commands must subclass this
 class Command:
-    # TODO: Command Doc
     """ Command Baseclass. Commands must subclass this.
 
         Attributes

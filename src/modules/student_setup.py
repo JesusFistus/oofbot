@@ -95,6 +95,7 @@ class Setup(commands.Command):
             # Check if User tiped in a valid study_group
             for study_group in client.guild.get_study_groups():
                 if message.content.upper() == study_group.name:
+
                     # break loop if input is a valid study_group
                     chosen_study_group = study_group
                     flag = False

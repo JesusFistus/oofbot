@@ -1,49 +1,48 @@
+import discord
 import feedparser
 
 
 class RssFeed:
-    def __init__(self):
-        self.new_feed = None
-        self.feed = None
-        self.entries = []
+    def __init__(self, feed_link, channel):
+        self.feed = []
+        self.feed_link = feed_link
+        self.channel = channel
 
     @staticmethod
     def get_entries(feed_obj):
         for feed_entry in feed_obj["entries"]:
             yield feed_entry
 
-    def refresh_feed(self):
-        self.new_feed = feedparser.parse("https://www.hm.edu/2/rss_feeds/newsrss/news_allg_rss.de.xml")
+    async def refresh(self):
+        new_feed = feedparser.parse(self.feed_link)
 
-        if self.new_feed == self.feed:
+        if new_feed == self.feed:
             return
 
-        elif self.feed is None:
-            self.update_feed()
+        # elif self.feed is None:
+        #     self.feed = new_feed
 
         else:
-            self.compare_feeds()
+            await self.compare_feeds(new_feed)
 
-    def compare_feeds(self):
-        for entry in self.get_entries(self.new_feed):
-            if not self.entries.count(entry):
-                self.send_feed_entry()
-                
-        self.update_feed()
-        
-    def update_feed(self):
-        self.feed = self.new_feed
+    async def compare_feeds(self, new_feed):
+        for entry in self.get_entries(new_feed):
+            if not self.feed:
+                await self.send_feed_entry(entry)
+            elif not [x for x in self.get_entries(self.feed)].count(entry):
+                await self.send_feed_entry(entry)
 
-        entry_list = []
-        for entry in self.get_entries(self.feed):
-            entry_list.append(entry)
+        self.feed = new_feed
 
-        self.entries = entry_list
-
-    def send_feed_entry(self, amount=0):
-        pass
+    async def send_feed_entry(self, entry):
+        message = await self.channel.send(entry['link'])
+        new_embed = message.embeds[0]
+        new_embed.description = entry['summary']
+        await message.edit(content=None, embed=new_embed)
+        # make_embed(s)
 
 
-feed = RssFeed()
-feed.refresh_feed()
-print(feed)
+
+# feed = RssFeed()
+# feed.refresh_feed()
+# print(feed)

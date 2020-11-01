@@ -1,7 +1,7 @@
 import sys
 import yaml
 from discord.utils import get
-
+from modules.rss_feed import RssFeed
 
 class BotConfig(yaml.YAMLObject):
     """ Container for bot-specific settings read from config.yml
@@ -65,6 +65,7 @@ class Guild:
         self.quicklinks = ''
         self.rules_channel = None
         self.student_role = None
+        self.feeds = []
 
     def get_study_groups(self):
         """ Generator yielding all study_groups belonging to the guild"""
@@ -76,7 +77,7 @@ class Guild:
 
 # TODO: rewrite
 def load_guild_config(client):
-    with open('data/test_guild.yml', 'r', encoding='utf8') as file:
+    with open('data/guild.yml', 'r', encoding='utf8') as file:
         guild_dict = yaml.load(file, Loader=yaml.Loader)
 
     # discord.guild object
@@ -93,6 +94,10 @@ def load_guild_config(client):
     client.guild.quicklinks = guild_dict['quicklink']
     client.guild.student_role = get(client.guild.discord_obj.roles, id=guild_dict['student_id'])
 
+    for feed in guild_dict['feeds'].values():
+        channel = get(client.guild.discord_obj.text_channels, id=feed['channel'])
+        if channel:
+            client.guild.feeds.append(RssFeed(feed['link'], channel))
     # get semester parameter as dict
     client.guild.semester = []
     for year, semester in guild_dict['semester'].items():

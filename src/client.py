@@ -33,7 +33,12 @@ class DiscordClient(discord.Client):
         # calendar refresher
         while True:
             await self.calendar.refresh()
-            await asyncio.sleep(30)
+
+            if self.guild.feeds:
+                for feed in self.guild.feeds:
+                    await feed.refresh()
+
+            await asyncio.sleep(5)
 
     async def on_member_join(self, member):
         await Setup.exec(self, member=member)

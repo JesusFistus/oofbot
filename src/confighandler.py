@@ -76,7 +76,7 @@ class Guild:
 
 # TODO: rewrite
 def load_guild_config(client):
-    with open('data/test_guild.yml', 'r', encoding='utf8') as file:
+    with open('data/guild.yml', 'r', encoding='utf8') as file:
         guild_dict = yaml.load(file, Loader=yaml.Loader)
 
     # discord.guild object

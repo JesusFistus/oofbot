@@ -1,3 +1,4 @@
+import asyncio
 import discord
 import feedparser
 
@@ -36,12 +37,30 @@ class RssFeed:
 
     async def send_feed_entry(self, entry):
         message = await self.channel.send(entry['link'])
-        new_embed = message.embeds[0]
-        new_embed.description = entry['summary']
-        await message.edit(content=None, embed=new_embed)
-        # make_embed(s)
+        await self.edit_embed(message.id, entry)
 
+    async def edit_embed(self, message_id, entry, timeout=5):
+        counter = 0
 
+        while 1:
+            message = await self.channel.history().get(id=message_id)
+            try:
+                new_embed = message.embeds[0]
+                description = entry['summary']
+
+                if len(description) >= 2000:
+                    description = description[:2000]
+
+                new_embed.description = description
+                await message.edit(content=None, embed=new_embed)
+                return
+
+            except IndexError or AttributeError:
+                await asyncio.sleep(0.5)
+                counter += 1
+
+                if counter >= timeout * 2:
+                    break
 
 # feed = RssFeed()
 # feed.refresh_feed()

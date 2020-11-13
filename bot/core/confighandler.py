@@ -1,36 +1,22 @@
+# TODO: full rewrite pls
 import sys
 import yaml
 from discord.utils import get
-from modules.rss_feed import RssFeed
-
-class BotConfig(yaml.YAMLObject):
-    """ Container for bot-specific settings read from config.yml
-
-        Attributes
-        -----------
-        token:    The bots discord token
-        prefix:   The command prefix
-        presence: The bots discord presence
-        """
-
-    yaml_tag = u'BotConfig'
-
-    def __init__(self, token, prefix, presence):
-        self.token = token
-        self.prefix = prefix
-        self.presence = presence
+from pathlib import Path
 
 
-with open('data/config.yml', 'r', encoding='utf8') as file:
-    config = yaml.load(file, Loader=yaml.Loader)
-    print('BotConfig loaded successfully')
+datapath = Path(__file__).absolute().parent.parent / 'data'
+dialogspath = datapath / 'dialogs.yml'
+guildpath = datapath / 'guild.yml'
 
-with open('data/dialogs.yml', 'r', encoding='utf8') as file:
+# TODO: make prefix guild-specific
+config = {'prefix': '!'}
+
+
+with dialogspath.open('r') as file:
     dialogs = yaml.load(file, Loader=yaml.Loader)
-    print('Dialogs loaded successfully')
 
 
-# TODO: auslagern
 class Semester:
     """ Represents a semester
 
@@ -75,9 +61,8 @@ class Guild:
                 yield study_group
 
 
-# TODO: rewrite
 def load_guild_config(client):
-    with open('data/guild.yml', 'r', encoding='utf8') as file:
+    with guildpath.open('r') as file:
         guild_dict = yaml.load(file, Loader=yaml.Loader)
 
     # discord.guild object
@@ -86,7 +71,7 @@ def load_guild_config(client):
     # Guild not found
     if guild_object is None:
         print(f'Bot is not part of a guild with the id = {guild_dict["id"]}. \n aborting.')
-        sys.exit()  # TODO: Programmstart abbrechen, Stacktrace sollte aber nicht geprinted werden
+        sys.exit()
 
     # get guild parameter as discord.objects
     client.guild = Guild(guild_object)
@@ -94,13 +79,9 @@ def load_guild_config(client):
     client.guild.quicklinks = guild_dict['quicklink']
     client.guild.student_role = get(client.guild.discord_obj.roles, id=guild_dict['student_id'])
 
-    for feed in guild_dict['feeds'].values():
-        channel = get(client.guild.discord_obj.text_channels, id=feed['channel'])
-        if channel:
-            client.guild.feeds.append(RssFeed(feed['link'], channel))
     # get semester parameter as dict
     client.guild.semester = []
-    for year, semester in guild_dict['semester'].items():
+    for semester in guild_dict['semester'].values():
         new_semester = Semester()
         new_semester.name = semester['name']
         announcement_channel = get(client.guild.discord_obj.text_channels, id=semester['announcement_channel'])  # TODO: Don't crash with missing or wrong entries in yml
@@ -111,4 +92,4 @@ def load_guild_config(client):
 
         client.guild.semester.append(new_semester)
 
-    print(f'Guildconfig for guild "{guild_object.name}" loaded successfully')
+    print(f'Guild "{guild_object.name}" loaded successfully')

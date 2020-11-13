@@ -1,13 +1,13 @@
 import discord
-import commands
-from confighandler import config, dialogs
-from event import user_input, EventError
+from core import commands
+from core.confighandler import config, dialogs
+from core.events import user_input, EventError
 
 
 class Setup(commands.Command):
     description = 'Startet den Setup-Dialog. \n' \
                   ' Hier kannst du dich registrieren, bzw. deine Angaben ändern.'
-    usage = f'Tippe {config.prefix}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
+    usage = f'Tippe {config["prefix"]}setup um das Setup zu starten. Hiermit kannst du deine Registrierung abschließen,' \
             f'bzw. deine Angaben aktualisieren'
 
     @staticmethod

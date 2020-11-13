@@ -1,10 +1,10 @@
 import discord
-import commands
-from confighandler import config
+from core import commands
+from core.confighandler import config
 
 
 class Help(commands.Command):
-    usage = f'usage: {config.prefix}help <command>'
+    usage = f'usage: {config["prefix"]}help <command>'
     arguments = 1
 
     @staticmethod
@@ -14,7 +14,7 @@ class Help(commands.Command):
         if len(arguments) == 1:  # TODO: get text from dialogs.yml 
             embed = discord.Embed(title='Verfügbare Befehle:',
                                   colour=discord.Colour(0xff0000),
-                                  description='_Für eine ausführe Beschreibund der Befehle tippe:_ \n '
+                                  description='_Für eine ausführe Beschreibung der Befehle tippe:_ \n '
                                               '\n'
                                               ' #help <Befehl>')
 
@@ -38,12 +38,12 @@ class Help(commands.Command):
 
             except KeyError:  # TODO: Send Embed instead of text and get text from dialogs.yml!
                 await message.author.send(f'{arguments[1]} is not a valid command.'
-                                          f'Type {config.prefix}help to get a list of all available commands.')
+                                          f'Type {config["prefix"]}help to get a list of all available commands.')
 
 
 class Clear(commands.Command):
     description = "Clears messages in a channel."
-    usage = f'{config.prefix}clear <amount> <users/roles>'
+    usage = f'{config["prefix"]}clear <amount> <users/roles>'
     arguments = 2
     permission = 2
 

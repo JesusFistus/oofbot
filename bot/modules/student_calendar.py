@@ -1,12 +1,18 @@
+# TODO: this THING needs a rewrite
 import asyncio
 import datetime
+import os
+import pickle
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 import dateutil.parser
 import discord
 import html2text as html2text
 from pytz import timezone
 
-from googleapihandler import get_entries
 from modules.general import quicklink
+
 
 TIMEZONE = timezone('Europe/Berlin')
 
@@ -15,6 +21,60 @@ async def _wait_until(dt):
     # sleep until the specified datetime
     now = datetime.datetime.now(TIMEZONE)
     await asyncio.sleep((dt - now).total_seconds())
+
+
+def fetch_entries(limit=3):
+    """ Fetches upcoming calendar entries
+
+    Parameters
+    ----------
+    limit:  The maximum amount of calendar entries fetched per calendar
+
+    Returns
+    -------
+    A flattened list of calendar entries
+    """
+
+    # If modifying these scopes, delete the file token.pickle.
+    scopes = ['https://www.googleapis.com/auth/calendar.readonly']
+
+    creds = None
+
+    if os.path.exists('data/google/token.pickle'):
+        with open('data/google/token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'data/google/credentials.json', scopes)
+            creds = flow.run_local_server(port=0)
+
+        # Save the credentials for the next run
+        with open('data/google/token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    service = build('calendar', 'v3', credentials=creds)
+    # Call the Calendar API
+    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+    calendars_result = service.calendarList().list().execute()
+    entries = []
+
+    for calendar_info in calendars_result['items']:
+        calendar = service.events().list(calendarId=calendar_info['id'], timeMin=now,
+                                         maxResults=limit,
+                                         singleEvents=True,
+                                         orderBy='startTime').execute()
+        for entry in calendar['items']:
+            if 'backgroundColor' in calendar_info:
+                entry['calendarColorId'] = calendar_info['backgroundColor']
+            entries.append(entry)
+
+    return entries
 
 
 def create_reminder_embed(entry):
@@ -134,17 +194,21 @@ class Calendar:
         self.client = client
         self.reminders = []
 
-    async def refresh(self):
-        """Fetches all google calendar entries and tries to set a reminder for each entry.
+    async def run(self, refresh_interval=10):
+        """Starts the calendar-mainloop, every refresh_interval
+        it fetches all google calendar entries and tries to set a reminder for each entry.
         If a fetched entry is already set as a reminder, the reminder will be overwritten."""
 
-        # Fetches the next 5 entries per calendar
-        loop = asyncio.get_running_loop()
-        entries = await loop.run_in_executor(None, get_entries)
+        while True:
+            # Fetches the next 5 entries per calendar
+            loop = asyncio.get_running_loop()
+            entries = await loop.run_in_executor(None, fetch_entries)
 
-        # Set a reminder for every entry
-        for entry in entries:
-            self._set_reminder(entry)
+            # Set a reminder for every entry
+            for entry in entries:
+                self._set_reminder(entry)
+
+            await asyncio.sleep(refresh_interval)
 
     def _set_reminder(self, entry):
         """Sets a reminder for the entry"""

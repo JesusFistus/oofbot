@@ -1,11 +1,10 @@
-from confighandler import config
+from core.confighandler import config
 import discord
 
 
 # TODO Embed
 
 
-# Command Baseclass. Commands must subclass this
 class Command:
     """ Command Baseclass. Commands must subclass this.
 
@@ -44,7 +43,7 @@ async def command_handler(client, message):
     if command not in commands.keys():  # TODO: get text from dialogs.yml
         embed = discord.Embed(title=f'__{command} ist kein verfügbarer Befehl!__',
                               colour=discord.Colour(0xff0000),
-                              description=f'Type **{config.prefix}** help to get a list of all available commands.')
+                              description=f'Type **{config["prefix"]}** help to get a list of all available commands.')
         await message.author.send(embed=embed)
         return
 
@@ -55,9 +54,9 @@ async def command_handler(client, message):
         arguments = ()
 
     # checks if the maximum amount of arguments is exceeded
-    if len(arguments) > commands[command].arguments:  # TODO: get text from dialogs.yml
-        await message.author.send(f'```Wrong usage of {config.prefix}{command}!\n'
-                                  f'Type _{config.prefix}help {command}_ to see the usage of the command.```')
+    if len(arguments) > commands[command].arguments:  # TODO: get text from dialogs.yml, embed
+        await message.author.send(f'```Wrong usage of {config["prefix"]}{command}!\n'
+                                  f'Type _{config["prefix"]}help {command}_ to see the usage of the command.```')
         return
 
     # Executes the command

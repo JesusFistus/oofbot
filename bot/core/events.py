@@ -19,10 +19,10 @@ async def user_input(channel, user):
         The "cought" Discord Message Object
     """
     event = UserInputEvent(channel, user)
-    output = await event._input()
+    output = await event.input()
     if output is None:
         raise EventError(f': {str(event.channel)}')
-    event._kill()
+    event.kill()
     return output
 
 
@@ -45,7 +45,6 @@ class UserInputEvent:
 
     def __init__(self, channel, user):
         """
-
         Args:
             channel: Discord Channel Object the event is listening on
             user: Discord Member Object the event listens to
@@ -58,26 +57,26 @@ class UserInputEvent:
         self._check_current_events()
         eventlist.append(self)
 
-    async def _input(self):
+    async def input(self):
         message = await self.queue.get()
 
         if message.content == STOPKEY:
-            self._kill()
+            self.kill()
             raise EventError(f'Event was aborted because the stopkey was received')
 
         return message
 
-    def _kill(self):
+    def kill(self):
         try:
             eventlist.remove(self)
         except ValueError:
-            print('Could not remove event from eventlist')
+            print('Could not remove event from eventlist.\n Ignoring exception')
 
     def _check_current_events(self):
         for event in eventlist:
             if event.channel == self.channel:
-                event._kill()
+                event.kill()
                 # raise EventError(f'There\'s already an ongoing event in this channel: {str(event.channel)}')
             elif event.user == self.user:
-                event._kill()
+                event.kill()
                 # raise EventError(f'There\'s already an ongoing event for this user: {str(event.user)}')

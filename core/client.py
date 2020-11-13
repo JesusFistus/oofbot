@@ -1,12 +1,10 @@
-import asyncio
 import discord
+
 from core.commands import command_handler
 from core.confighandler import config, load_guild_config
-from core.events import _check_for_event
+from core.events import check_for_event
 from modules.student_calendar import Calendar
 from modules.student_setup import Setup
-
-# TODO: Discord Intents
 
 
 class DiscordClient(discord.Client):
@@ -34,16 +32,15 @@ class DiscordClient(discord.Client):
     async def on_member_join(self, member):
         await Setup.exec(self, member=member)
 
-    async def on_member_delete(self, member):
-        pass
-
     async def on_message(self, message):
         # ignore own messages
         if message.author == self.user:
             return
 
+        # catch commands
         if message.content.startswith(config["prefix"]):
             await command_handler(self, message)
             return
 
-        await _check_for_event(message)
+        # catch user input
+        await check_for_event(message)

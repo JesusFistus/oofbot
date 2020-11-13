@@ -1,5 +1,5 @@
 import pickle
-from discord import __version__ as dcpy_version
+from discord import __version__ as dcpy_version, Intents
 from pathlib import Path
 from sys import exit
 
@@ -16,7 +16,7 @@ try:
     with tokenpath.open('rb') as file:
         token = pickle.load(file)
 except FileNotFoundError:
-    print('dctoken.pickle not found, use scripts/set.token.py to set a discord token.\n'
+    print('No discord-token found, use scripts/set_token.py to set one.\n'
           'Aborting start')
     exit()
 
@@ -25,5 +25,9 @@ print("-------------------------")
 print(f"Discord.py version: {dcpy_version}")
 print(f"EIT-BOT version: {__version__}")
 
-client = client.DiscordClient()
+
+intents = Intents.default()
+intents.members = True
+
+client = client.DiscordClient(intents=intents)
 client.run(token)

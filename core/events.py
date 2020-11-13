@@ -26,7 +26,7 @@ async def user_input(channel, user):
     return output
 
 
-async def _check_for_event(message):
+async def check_for_event(message):
     if eventlist:
         for event in eventlist:
             if event.channel == message.channel:

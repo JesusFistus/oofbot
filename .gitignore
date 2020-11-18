@@ -132,3 +132,4 @@ dmypy.json
 .idea/
 .vscode/
 data/
+src/feed_pickle
